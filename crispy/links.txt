@@ -1,0 +1,4 @@
+https://betterprogramming.pub/how-to-create-an-nft-contract-without-coding-skills-968d3fc37f5e
+https://docs.openzeppelin.com/contracts/4.x/wizard
+https://faucets.chain.link/rinkeby
+https://nft.storage/

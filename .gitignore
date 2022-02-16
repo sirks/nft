@@ -1,0 +1,9 @@
+### jetbrains ###
+*.iml
+.idea
+
+### macOS ###
+*.DS_Store
+.AppleDouble
+.LSOverride
+.mypy_cache
