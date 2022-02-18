@@ -64,7 +64,7 @@ export const MyNfts = (props: MyNftsProps) => {
             />)}
             {error && <div>Error: {error}</div>}
             <div>Signature</div>
-            {signature && <QRCode value={signature}/>}
+            {signature && <QRCode value={signature} level="H"/>}
         </div>
     )
 }

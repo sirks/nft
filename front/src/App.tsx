@@ -10,13 +10,12 @@ import {ABI} from "./Abi";
 
 const App = () => {
     if (!window.ethereum) {
-        return (
-            <div>install metamask extension</div>
-        )
+        window.location.href = `https://metamask.app.link/dapp/${window.location.host}`;
+        return <></>
     }
-
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+    provider.send("eth_requestAccounts", [])
 
     return (
         <BrowserRouter>

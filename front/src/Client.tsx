@@ -13,7 +13,7 @@ function Client(props:BaseProps) {
         initAccount();
     }, [])
 
-    window.ethereum.on('accountsChanged', (accounts: string[]) => {
+    props.provider.on('accountsChanged', (accounts: string[]) => {
         setAddress(accounts[0]);
     });
 
