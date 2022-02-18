@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import {MyNfts} from "./MyNfts";
 import {BaseProps} from "./types";
+import {Link} from "react-router-dom";
 
 function Client(props:BaseProps) {
     const [address, setAddress] = useState<string>("");
@@ -18,6 +19,7 @@ function Client(props:BaseProps) {
     });
 
     return <div>
+        <Link to='admin'>goto admin</Link>
         {address && <MyNfts {...props} address={address}/>}
         </div>
     ;
