@@ -5,16 +5,12 @@ import {ethers} from "ethers";
 const signMessage = async (message: string) => {
     try {
         console.log({message});
-        if (!window.ethereum)
+        if (!window.ethereum) {
             throw new Error("No crypto wallet found. Please install it.");
-
-        await window.ethereum.send("eth_requestAccounts");
+        }
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const signature = await signer.signMessage(message);
-        const address = await signer.getAddress();
-
-        return signature;
+        return await signer.signMessage(message);
     } catch (err) {
         console.log("could not sign message");
     }

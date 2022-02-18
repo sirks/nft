@@ -1,16 +1,31 @@
 import React from 'react';
 import './App.css';
-import SignMessage from "./SignMessage";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Admin from "./Admin";
+import Client from "./Client";
+import {ethers} from "ethers";
+import {CONTRACT_ADDRESS} from "./environment";
+import {ABI} from "./Abi";
 
-function App() {
-    if (!window.ethereum){
+
+const App = () => {
+    if (!window.ethereum) {
         return (
-            <div>install metamask chrome extension</div>
+            <div>install metamask extension</div>
         )
     }
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+
     return (
-        <SignMessage/>
-    );
+        <BrowserRouter>
+            <Routes>
+                <Route path='/admin' element={<Admin provider={provider} contract={contract}/>}/>
+                <Route path='' element={<Client provider={provider} contract={contract}/>}/>
+            </Routes>
+        </BrowserRouter>
+    )
 }
 
 export default App;
