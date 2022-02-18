@@ -19,7 +19,6 @@ const Admin = (props: BaseProps) => {
     stateRef.current = state;
 
     const onRead: OnResultFunction = (result, error) => {
-        console.log(stateRef.current);
         if (!stateRef.current.stop && result) {
             setState({msg: "checking qr", success: false, stop: true});
             onQr(result.getText());
