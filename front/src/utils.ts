@@ -1,6 +1,5 @@
 import {ethers} from "ethers";
-import {BaseRestResp, Resp} from "./Types/types";
-import {fetchJson} from "ethers/lib/utils";
+import {BaseRestResp, Resp} from "./types";
 import {SERVER} from "./environment";
 
 export function ipfs2https(uri: string) {
@@ -28,7 +27,7 @@ const CONTRACT_BASE_URL = `${SERVER}/contract`
 
 export async function getTokensOf(address: string): Promise<string[]> {
 
-    return await fetchJson(`${CONTRACT_BASE_URL}/tokens-of/${address}`);
+    return await fetch(`${CONTRACT_BASE_URL}/tokens-of/${address}`).then(r=>r.json());
 }
 
 export async function getTokenURI(token: string): Promise<string> {
@@ -44,9 +43,11 @@ export async function getOwnerOf(token: string): Promise<string> {
 const ACCESS_BASE_URL = `${SERVER}/access`
 
 export async function mint(event: string, token: string, address: string): Promise<BaseRestResp> {
-    return await fetchJson(`${ACCESS_BASE_URL}/mint?event=${event}&token=${token}&address=${address}`)
+    return await fetch(`${ACCESS_BASE_URL}/mint?event=${event}&token=${token}&address=${address}`)
+        .then(r=>r.json());
 }
 
 export async function entrance(event: string, token: string, signature: string): Promise<BaseRestResp> {
-    return await fetchJson(`${ACCESS_BASE_URL}/entrance?event=${event}&token=${token}&signature=${signature}`)
+    return await fetch(`${ACCESS_BASE_URL}/entrance?event=${event}&token=${token}&signature=${signature}`)
+        .then(r=>r.json());
 }

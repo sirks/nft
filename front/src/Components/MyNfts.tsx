@@ -27,7 +27,7 @@ const MyNfts: FC<MyNftsProps> = ({provider, address}) => {
 
     const getImageUrl = async (id: string): Promise<Nft> => {
         const uri = await getTokenURI(id);
-        const metadata: any = await fetchJson(ipfs2https(uri));
+        const metadata: any = await fetch(ipfs2https(uri)).then(r => r.json());
         return {url: ipfs2https(metadata.image), id, name: metadata.name};
     }
 

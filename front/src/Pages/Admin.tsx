@@ -35,6 +35,7 @@ const Admin: FC<BaseProps> = ({}) => {
         }
         const serverResp: BaseRestResp = await entrance(ENTRANCE_EVENT, tokenId, signature);
         let msg = "";
+        debugger;
         if (serverResp.err) {
             switch (serverResp.err.code) {
                 case ERR.INCORRECT_DATA:

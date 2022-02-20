@@ -27,6 +27,7 @@
     "express": "^4.17.1",
     "mongodb": "^3.5.9",
     "multer": "^1.4.2",
-    "nft.storage": "^6.0.0"
+    "nft.storage": "^6.0.0",
+    "replace-color": "^2.3.0"
   }
 }

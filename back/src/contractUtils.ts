@@ -2,7 +2,7 @@ import {BigNumber, ethers} from "ethers";
 import {BLOCKCHAIN_URL, CONTRACT_ADDRESS, PRIVATE_KEY} from "./config/config";
 
 const ABI = [
-    "function safeMint(address to, string memory uri) public onlyOwner",
+    "function safeMint(address to, string memory uri) public",
     "function tokensOf(address owner) public view returns (uint256[] memory)",
     "function tokenURI(uint256 tokenId) public view returns (string memory)",
     "function ownerOf(uint256 tokenId) public view returns (address)",
