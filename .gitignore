@@ -20,4 +20,4 @@ build
 .firebase
 
 #config
-*/config.ts
+back/src/config/config.ts

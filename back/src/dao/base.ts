@@ -1,6 +1,6 @@
 import {Collection, Db, FilterQuery, MongoClient, ObjectId} from 'mongodb';
 import {BaseEntity} from '../types';
-import {DB_NAME, DB_HOST, DB_PASS, DB_USER} from '../../config';
+import {DB_NAME, DB_HOST, DB_PASS, DB_USER} from '../config/config';
 
 const uri = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
 
@@ -35,19 +35,14 @@ export default abstract class Dao<T extends BaseEntity> {
     return await col.findOne(filter);
   }
 
-  public async findOneById(id: string): Promise<T | null> {
-    const col = await this.getCollection();
-    return await col.findOne({id});
-  }
-
   public async findOneBy_id(_id: string): Promise<T | null> {
     const col = await this.getCollection();
     return await col.findOne(new ObjectId(_id));
   }
 
-  public async delete(id: string): Promise<void> {
+  public async delete(_id: string): Promise<void> {
     const col = await this.getCollection();
-    await col.deleteOne({id});
+    await col.deleteOne({_id});
   }
 
   public async findAll(): Promise<T[]> {
@@ -62,10 +57,10 @@ export default abstract class Dao<T extends BaseEntity> {
     await col.insertOne(entity)
   }
 
-  public async update(id: string, entity: T): Promise<void> {
+  public async update(entity: T): Promise<void> {
     const col = await this.getCollection();
     entity.ts = new Date().getTime();
-    await col.updateOne({id}, {$set: entity}, {upsert: false})
+    await col.updateOne({_id:entity._id}, {$set: entity}, {upsert: false})
   }
 }
 

@@ -1,13 +1,33 @@
 import {ethers} from "ethers";
-import {BLOCKCHAIN_URL, CONTRACT_ADDRESS} from "../config";
+import {BLOCKCHAIN_URL, CONTRACT_ADDRESS, PRIVATE_KEY} from "./config/config";
 
-export const ABI = [
+const ABI = [
     "function safeMint(address to, string memory uri) public onlyOwner",
+    "function tokensOf(address owner) public view returns (uint256[] memory)",
+    "function tokenURI(uint256 tokenId) public view returns (string memory)",
+    "function ownerOf(uint256 tokenId) public view returns (address)",
 ]
 
 const provider = new ethers.providers.JsonRpcProvider(BLOCKCHAIN_URL);
-const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
-export async function mint(to:string) {
+export async function mint(to: string, uri: string) {
+    return await contract.safeMint(to, uri);
+}
 
+export default function recoverAddress(msg: string, signature: string) {
+    return ethers.utils.verifyMessage(msg, signature)
+}
+
+export async function tokensOf(address: string) {
+    return await contract.tokensOf(address);
+}
+
+export async function tokenURI(token: string) {
+    return await contract.tokenURI(token);
+}
+
+export async function ownerOf(token: string) {
+    return await contract.ownerOf(token);
 }
