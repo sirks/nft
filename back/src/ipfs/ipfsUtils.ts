@@ -7,7 +7,7 @@ import path from "path";
 // connect to a different API
 const nftStorage = new NFTStorage({ token: NFT_STORAGE_KEY })
 
-async function fileFromPath(filePath) {
+async function fileFromPath(filePath: string) {
     const content = await fs.promises.readFile(filePath)
     return new File([content], "crispy.png", { type: "image/png"})
 }

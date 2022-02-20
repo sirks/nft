@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as path from "path";
 import {File} from "nft.storage";
 
-async function fileFromPath(filePath) {
+async function fileFromPath(filePath: string) {
     const content = await fs.promises.readFile(filePath)
     const type = mime.lookup(filePath)
     return new File([content], path.basename(filePath), { type })
