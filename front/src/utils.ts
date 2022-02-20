@@ -42,8 +42,8 @@ export async function getOwnerOf(token: string): Promise<string> {
 
 const ACCESS_BASE_URL = `${SERVER}/access`
 
-export async function mint(event: string, token: string, address: string): Promise<BaseRestResp> {
-    return await fetch(`${ACCESS_BASE_URL}/mint?event=${event}&token=${token}&address=${address}`)
+export async function mint(event: string, hash: string, address: string): Promise<BaseRestResp> {
+    return await fetch(`${ACCESS_BASE_URL}/mint?event=${event}&token=${hash}&address=${address}`)
         .then(r=>r.json());
 }
 

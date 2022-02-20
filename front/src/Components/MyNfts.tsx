@@ -2,7 +2,6 @@ import React, {FC, useEffect, useState} from "react";
 import {getTokensOf, getTokenURI, ipfs2https, signMessage} from "../utils";
 import QRCode from "react-qr-code";
 import {BaseProps, Nft} from "../Types/types";
-import {fetchJson} from "ethers/lib/utils";
 
 type MyNftsProps = {
     address: string,

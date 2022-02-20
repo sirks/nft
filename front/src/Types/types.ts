@@ -31,9 +31,3 @@ export type Nft = {
     url: string,
     id: string,
 }
-
-export type AdminState = {
-    msg: string,
-    success: boolean,
-    stop: boolean,
-}

@@ -1,10 +1,16 @@
 import React, {FC, MouseEvent, useRef, useState} from 'react';
 import {QrReader} from 'react-qr-reader';
 import {entrance, verifyMessage} from "../utils";
-import {AdminState, BaseProps, BaseRestResp, ERR, OK} from "../Types/types";
+import {BaseProps, BaseRestResp, ERR, OK} from "../Types/types";
 import {Link} from "react-router-dom";
 import {OnResultFunction} from "react-qr-reader/src/types/index";
 import {ENTRANCE_EVENT} from "../environment";
+
+export type AdminState = {
+    msg: string,
+    success: boolean,
+    stop: boolean,
+}
 
 const Admin: FC<BaseProps> = ({}) => {
     const [state, setState] = useState<AdminState>({msg: "reading", success: false, stop: false});
@@ -35,7 +41,6 @@ const Admin: FC<BaseProps> = ({}) => {
         }
         const serverResp: BaseRestResp = await entrance(ENTRANCE_EVENT, tokenId, signature);
         let msg = "";
-        debugger;
         if (serverResp.err) {
             switch (serverResp.err.code) {
                 case ERR.INCORRECT_DATA:

@@ -17,7 +17,7 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route path='/admin' element={<Admin provider={provider}/>}/>
-                <Route path='' element={<Client provider={provider}/>}/>
+                <Route path='*' element={<Client provider={provider}/>}/>
             </Routes>
         </BrowserRouter>
     );
