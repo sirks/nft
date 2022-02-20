@@ -1,20 +1,12 @@
-import React, {MouseEvent, useRef, useState} from 'react';
-import './App.css';
+import React, {FC, MouseEvent, useRef, useState} from 'react';
 import {QrReader} from 'react-qr-reader';
-import {entrance, verifyMessage} from "./utils";
-import {BaseProps, BaseRestResp} from "./types";
+import {entrance, verifyMessage} from "../utils";
+import {AdminState, BaseProps, BaseRestResp} from "../Types/types";
 import {Link} from "react-router-dom";
 import {OnResultFunction} from "react-qr-reader/src/types/index";
-import {ENTRANCE_EVENT} from "./environment";
+import {ENTRANCE_EVENT} from "../environment";
 
-type AdminState = {
-    msg: string,
-    success: boolean,
-    stop: boolean,
-}
-
-
-const Admin = (props: BaseProps) => {
+const Admin: FC<BaseProps> = ({}) => {
     const [state, setState] = useState<AdminState>({msg: "reading", success: false, stop: false});
     const stateRef = useRef<AdminState>(state);
     stateRef.current = state;
@@ -51,20 +43,21 @@ const Admin = (props: BaseProps) => {
         setState({msg: "reading", success: false, stop: false});
     }
 
-    return <div>
-        <Link to='/'>goto client</Link>
-        {state.stop && <div>click on camera to reset</div>}
-        <div onClick={reset}>
-            <QrReader
-                constraints={{facingMode: 'environment', aspectRatio: 1, height: 300, width: 300}}
-                containerStyle={{height: 300, width: 300}}
-                onResult={onRead}
-            />
+    return (
+        <div>
+            <Link to='/'>goto client</Link>
+            {state.stop && <div>click on camera to reset</div>}
+            <div onClick={reset}>
+                <QrReader
+                    constraints={{facingMode: 'environment', aspectRatio: 1, height: 300, width: 300}}
+                    containerStyle={{height: 300, width: 300}}
+                    onResult={onRead}
+                />
+            </div>
+            {state.msg && <div color={"red"}>Error: {state.msg}</div>}
+            {state.success && <div color={"green"}>This guy can pass</div>}
         </div>
-        {state.msg && <div color={"red"}>Error: {state.msg}</div>}
-        {state.success && <div color={"green"}>This guy can pass</div>}
-    </div>
-        ;
+    );
 }
 
 export default Admin;

@@ -24,3 +24,15 @@ export const OK = {
     NEW_VISIT: 1,
     RETURNING_VISIT: 2
 }
+
+export type Nft = {
+    name: string,
+    url: string,
+    id: string,
+}
+
+export type AdminState = {
+    msg: string,
+    success: boolean,
+    stop: boolean,
+}

@@ -1,5 +1,5 @@
 import {ethers} from "ethers";
-import {BaseRestResp, Resp} from "./types";
+import {BaseRestResp, Resp} from "./Types/types";
 import {fetchJson} from "ethers/lib/utils";
 import {SERVER} from "./environment";
 
