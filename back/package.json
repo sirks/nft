@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "ts-jest",
+    "test": "jest",
     "build": "rm -rf ./build && tsc",
     "start": "node build/index.js",
     "start:dev": "nodemon"
@@ -22,6 +22,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "ethers": "^5.5.4",
     "express": "^4.17.1",
     "mongodb": "^3.5.9",

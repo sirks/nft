@@ -1,5 +1,4 @@
 import {ethers} from "ethers";
-import {Contract} from "@ethersproject/contracts";
 
 export type Resp = {
     ok: string,
@@ -7,6 +6,21 @@ export type Resp = {
 }
 
 export type BaseProps = {
-    contract: Contract,
     provider: ethers.providers.Web3Provider
+}
+
+type HttpOk = { data: any }
+type HttpError = { err: { msg: string, code: number } }
+export type BaseRestResp = HttpOk & HttpError;
+
+export const ERR = {
+    INCORRECT_DATA: -1,
+    NO_SUCH_TOKEN: -2,
+    TOKEN_USED: -3,
+    TOKEN_STOLEN: -4,
+}
+
+export const OK = {
+    NEW_VISIT: 1,
+    RETURNING_VISIT: 2
 }

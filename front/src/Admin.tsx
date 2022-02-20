@@ -1,10 +1,11 @@
 import React, {MouseEvent, useRef, useState} from 'react';
 import './App.css';
 import {QrReader} from 'react-qr-reader';
-import {verifyMessage} from "./utils";
-import {BaseProps} from "./types";
+import {entrance, verifyMessage} from "./utils";
+import {BaseProps, BaseRestResp} from "./types";
 import {Link} from "react-router-dom";
 import {OnResultFunction} from "react-qr-reader/src/types/index";
+import {ENTRANCE_EVENT} from "./environment";
 
 type AdminState = {
     msg: string,
@@ -38,11 +39,11 @@ const Admin = (props: BaseProps) => {
             setState({msg: `could not verify: ${verifyResp.nok}`, success: false, stop});
             return;
         }
-        const ownerAddress = await props.contract.ownerOf(tokenId);
-        if (ownerAddress !== verifyResp.ok) {
-            setState({msg: `stolen ticket owner:${ownerAddress}, this guy: ${verifyResp.ok}`, success: false, stop});
-            return;
+        const serverResp:BaseRestResp = await entrance(ENTRANCE_EVENT, tokenId, signature);
+        if (serverResp.err){
+
         }
+
         setState({msg: "", success: true, stop});
     }
 

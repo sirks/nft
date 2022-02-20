@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {BigNumber} from "ethers";
-import {ipfs2https, signMessage} from "./utils";
+import {getTokensOf, getTokenURI, ipfs2https, signMessage} from "./utils";
 import QRCode from "react-qr-code";
 import {BaseProps} from "./types";
+import {fetchJson} from "ethers/lib/utils";
 
 type MyNftsProps = {
     address: string,
@@ -11,7 +12,7 @@ type MyNftsProps = {
 type Nft = {
     name: string,
     url: string,
-    id: number,
+    id: string,
 }
 
 export const MyNfts = (props: MyNftsProps) => {
@@ -20,16 +21,15 @@ export const MyNfts = (props: MyNftsProps) => {
     const [error, setError] = useState<string>("waiting for signature");
 
 
-    const getImageUrl = async (tokenId: BigNumber): Promise<Nft> => {
-        const id = tokenId.toNumber();
-        const uri: string = await props.contract.tokenURI(id);
-        const metadata: any = await fetch(ipfs2https(uri)).then(response => response.json());
+    const getImageUrl = async (id: string): Promise<Nft> => {
+        const uri = await getTokenURI(id);
+        const metadata: any = await fetchJson(ipfs2https(uri));
         return {url: ipfs2https(metadata.image), id, name: metadata.name};
     }
 
     useEffect(() => {
         const reloadNfts = async () => {
-            const tokenIds: BigNumber[] = await props.contract.tokensOf(props.address);
+            const tokenIds = await getTokensOf(props.address);
             let urls = await Promise.all(tokenIds.map(getImageUrl));
             setNfts(urls);
         }
@@ -39,8 +39,8 @@ export const MyNfts = (props: MyNftsProps) => {
         reloadNfts();
     }, [props.address]);
 
-    const handleSign = async (e: React.MouseEvent<HTMLImageElement>, id: number) => {
-        const sig = await signMessage(props.provider, id.toString());
+    const handleSign = async (e: React.MouseEvent<HTMLImageElement>, id: string) => {
+        const sig = await signMessage(props.provider, id);
         if (!sig) {
             setError("Could not sign");
             setSignature("");
@@ -68,3 +68,4 @@ export const MyNfts = (props: MyNftsProps) => {
         </div>
     )
 }
+

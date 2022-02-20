@@ -1,4 +1,4 @@
-import {ethers} from "ethers";
+import {BigNumber, ethers} from "ethers";
 import {BLOCKCHAIN_URL, CONTRACT_ADDRESS, PRIVATE_KEY} from "./config/config";
 
 const ABI = [
@@ -21,7 +21,7 @@ export default function recoverAddress(msg: string, signature: string) {
 }
 
 export async function tokensOf(address: string) {
-    return await contract.tokensOf(address);
+    return (await contract.tokensOf(address)).map(t=>t.toString());
 }
 
 export async function tokenURI(token: string) {
