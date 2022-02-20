@@ -1,7 +1,6 @@
 import express from 'express';
 import Access from '../dao/Access';
-import {BaseRestResp} from "../types";
-import {ERR, OK} from "../errors";
+import {BaseRestResp, ERR, OK} from "../types";
 import {dummyStore} from "../ipfs/ipfsUtils";
 import recoverAddress, {mint, ownerOf} from "../contractUtils";
 import {setTimeout} from "timers";

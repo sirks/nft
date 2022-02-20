@@ -1,7 +1,7 @@
 import React, {FC, MouseEvent, useRef, useState} from 'react';
 import {QrReader} from 'react-qr-reader';
 import {entrance, verifyMessage} from "../utils";
-import {AdminState, BaseProps, BaseRestResp} from "../Types/types";
+import {AdminState, BaseProps, BaseRestResp, ERR, OK} from "../Types/types";
 import {Link} from "react-router-dom";
 import {OnResultFunction} from "react-qr-reader/src/types/index";
 import {ENTRANCE_EVENT} from "../environment";
@@ -20,23 +20,49 @@ const Admin: FC<BaseProps> = ({}) => {
 
     const onQr = async (txt: string) => {
         const stop = true;
+        const success = false;
+
         const content = txt.split("|");
         if (content.length !== 2) {
-            setState({msg: `incorrect qr code: ${txt}`, success: false, stop});
+            setState({msg: `incorrect qr code: ${txt}`, success, stop});
             return;
         }
         const [tokenId, signature] = content;
         const verifyResp = verifyMessage(tokenId, signature)
         if (verifyResp.nok) {
-            setState({msg: `could not verify: ${verifyResp.nok}`, success: false, stop});
+            setState({msg: `could not verify: ${verifyResp.nok}`, success, stop});
             return;
         }
-        const serverResp:BaseRestResp = await entrance(ENTRANCE_EVENT, tokenId, signature);
-        if (serverResp.err){
-
+        const serverResp: BaseRestResp = await entrance(ENTRANCE_EVENT, tokenId, signature);
+        let msg = "";
+        if (serverResp.err) {
+            switch (serverResp.err.code) {
+                case ERR.INCORRECT_DATA:
+                    msg = `could not verify: ${serverResp.err.msg}`;
+                    break;
+                case ERR.TOKEN_USED:
+                    msg = "ticket used";
+                    break;
+                case ERR.NO_SUCH_TOKEN:
+                    msg = "no such ticket";
+                    break;
+                case ERR.TOKEN_STOLEN:
+                    msg = "not your ticket";
+                    break;
+                default:
+                    //unknown error
+                    msg = "thou shalt not pass";
+            }
+            setState({msg, success, stop});
+            return;
         }
-
-        setState({msg: "", success: true, stop});
+        if (!serverResp.data) {
+            //unknown error
+            setState({msg: "thou shalt not pass", success, stop});
+            return
+        }
+        msg = serverResp.data.code === OK.NEW_VISIT ? "WEOLCOME" : "WELCOME BACK"
+        setState({msg, success: true, stop});
     }
 
     const reset = (e: MouseEvent<HTMLDivElement>) => {
