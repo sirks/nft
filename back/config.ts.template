@@ -1,0 +1,11 @@
+export const DB_USER = 'xxx';
+export const DB_PASS = 'xxx';
+export const DB_HOST = 'sandbox.apile.mongodb.net';
+export const DB_NAME = 'xxx';
+
+export const PORT = 9000;
+
+export const ETH_URL = "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161";
+export const CONTRACT = "0x0000";
+
+export const NFT_STORAGE_KEY = "zxcvbnm";

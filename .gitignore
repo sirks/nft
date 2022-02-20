@@ -6,23 +6,18 @@
 *.DS_Store
 .AppleDouble
 .LSOverride
-.mypy_cache
 
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
-dist/
+node_modules
 
 # testing
-/coverage
-
-# next.js
-/.next/
-/out/
+coverage
 
 # production
-/build
+build
 
 #firebase
 .firebase
+
+#config
+*/config.ts

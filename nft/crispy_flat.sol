@@ -1,4 +1,3 @@
-
 // File: @openzeppelin/contracts/utils/Counters.sol
 
 
@@ -284,7 +283,7 @@ library Address {
     function sendValue(address payable recipient, uint256 amount) internal {
         require(address(this).balance >= amount, "Address: insufficient balance");
 
-        (bool success, ) = recipient.call{value: amount}("");
+        (bool success,) = recipient.call{value : amount}("");
         require(success, "Address: unable to send value, recipient may have reverted");
     }
 
@@ -358,7 +357,7 @@ library Address {
         require(address(this).balance >= value, "Address: insufficient balance for call");
         require(isContract(target), "Address: call to non-contract");
 
-        (bool success, bytes memory returndata) = target.call{value: value}(data);
+        (bool success, bytes memory returndata) = target.call{value : value}(data);
         return verifyCallResult(success, returndata, errorMessage);
     }
 
@@ -1387,8 +1386,10 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
         if (tokenIndex != lastTokenIndex) {
             uint256 lastTokenId = _ownedTokens[from][lastTokenIndex];
 
-            _ownedTokens[from][tokenIndex] = lastTokenId; // Move the last token to the slot of the to-delete token
-            _ownedTokensIndex[lastTokenId] = tokenIndex; // Update the moved token's index
+            _ownedTokens[from][tokenIndex] = lastTokenId;
+            // Move the last token to the slot of the to-delete token
+            _ownedTokensIndex[lastTokenId] = tokenIndex;
+            // Update the moved token's index
         }
 
         // This also deletes the contents at the last position of the array
@@ -1413,8 +1414,10 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
         // an 'if' statement (like in _removeTokenFromOwnerEnumeration)
         uint256 lastTokenId = _allTokens[lastTokenIndex];
 
-        _allTokens[tokenIndex] = lastTokenId; // Move the last token to the slot of the to-delete token
-        _allTokensIndex[lastTokenId] = tokenIndex; // Update the moved token's index
+        _allTokens[tokenIndex] = lastTokenId;
+        // Move the last token to the slot of the to-delete token
+        _allTokensIndex[lastTokenId] = tokenIndex;
+        // Update the moved token's index
 
         // This also deletes the contents at the last position of the array
         delete _allTokensIndex[tokenId];
@@ -1428,14 +1431,15 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
 pragma solidity ^0.8.4;
 
 
-
-
-
-
 contract CrispyCoin is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
+
+    //event => token => client
+    mapping(string => mapping(uint256 => address)) private attendanceByToken;
+    //event => address => token
+    mapping(string => mapping(address => uint256)) private attendanceByClient;
 
     constructor() ERC721("Crispy Coin", "CCC") {}
 
@@ -1477,15 +1481,29 @@ contract CrispyCoin is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
-
-    function tokensOf(address owner) public view returns (uint256[] memory) {
-        uint256 count = ERC721.balanceOf(owner);
+    function tokensOf(address client) public view returns (uint256[] memory) {
+        uint256 count = ERC721.balanceOf(client);
         uint[] memory _tokensOfOwner = new uint[](count);
         uint i;
 
-        for (i=0;i<count;i++){
-            _tokensOfOwner[i] = ERC721Enumerable.tokenOfOwnerByIndex(owner, i);
+        for (i = 0; i < count; i++) {
+            _tokensOfOwner[i] = ERC721Enumerable.tokenOfOwnerByIndex(client, i);
         }
         return _tokensOfOwner;
+    }
+
+    function attend(string event_, uint256 tokenId, address client) public onlyOwner {
+        owner = ERC721.ownerOf(tokenId);
+        require(attender == owner);
+        attendanceByToken[event_][tokenId] = client;
+        attendanceByClient[event_][client] = tokenId;
+    }
+
+    function attendedWithToken(string event_, uint256 tokenId) public view returns (address) {
+        return attendanceByToken[event_][tokenId];
+    }
+
+    function attendedByClient(string event_, address client) public view returns (uint256) {
+        return attendanceByClient[event_][client];
     }
 }
