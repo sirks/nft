@@ -1,6 +1,6 @@
 import {ethers} from "ethers";
-import {BaseRestResp, Resp} from "./types";
 import {SERVER} from "./environment";
+import {BaseRestResp, Resp} from "./Types/types";
 
 export function ipfs2https(uri: string) {
     return uri.replace("ipfs://", "https://ipfs.io/ipfs/");
