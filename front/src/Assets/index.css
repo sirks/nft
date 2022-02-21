@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    /*html {*/
+    /*    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;*/
+    /*    font-weight: 900;*/
+    /*}*/
+
+    @font-face {
+        font-family: "NeueMachina";
+        font-weight: 300;
+        src: url("fonts/NeueMachina-Regular.otf");
+    }
+
+    @font-face {
+        font-family: "HelveticaNeueBlack";
+        font-weight: 900;
+        src: url("fonts/HelveticaNeue-Black.woff2");
+    }
+
+    @font-face {
+        font-family: "HelveticaNeueBold";
+        font-weight: 500;
+        src: url("fonts/HelveticaNeue-Bold.woff2");
+    }
+
+    @font-face {
+        font-family: "HelveticaNeueRegular";
+        font-weight: 300;
+        src: url("fonts/HelveticaNeue-Regular.woff2");
+    }
+
+    p {
+        font-family: NeueMachina, serif;
+    }
+
+    html, body, h1, h2, h3, h4, h5, h6 {
+        font-family: HelveticaNeueBlack, serif;
+    }
+}

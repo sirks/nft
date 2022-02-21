@@ -7,7 +7,7 @@ type MintProps = {
     address: string,
 }
 
-const Mint: FC<MintProps> = (props) => {
+const Mint: FC<MintProps> = ({address}) => {
     const [minting, setMinting] = useState<boolean>(false);
     const [err, setErr] = useState<string>("");
     const [lastMintUrl, setLastMint] = useState<string>("");
@@ -44,17 +44,19 @@ const Mint: FC<MintProps> = (props) => {
         setMinting(false);
         setLastMint(mintResult.data.img);
     }
-    return <div>
-        {lastMintUrl && <div>
-            <div>Your nft is on its way</div>
-            <img src={ipfs2https(lastMintUrl)} width={200} height={200}/>
-        </div>}
-        {minting
-            ? <div>Minting ...</div>
-            : <button style={{backgroundColor: "green"}} onClick={e => onMint(props.address, path)}>MINT MY NFT</button>
-        }
-        {err && <div color={"red"}>Error: {err}</div>}
-    </div>
+    return (
+        <div>
+            {lastMintUrl && <div>
+                <div>Your nft is on its way</div>
+                <img src={ipfs2https(lastMintUrl)} width={200} height={200}/>
+            </div>}
+            {minting
+                ? <div>Minting ...</div>
+                : <button style={{backgroundColor: "green"}} onClick={e => onMint(address, path)}>MINT MY NFT</button>
+            }
+            {err && <div color={"red"}>Error: {err}</div>}
+        </div>
+    );
 }
 
 export default Mint;
