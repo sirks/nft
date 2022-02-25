@@ -4,6 +4,7 @@ import {BaseProps} from "../Types/types";
 import {Link} from "react-router-dom";
 import Mint from "../Components/Mint";
 import Welcome from "../Components/Welcome";
+import UnlockAccount from "../Components/UnlockAccount";
 
 
 const Client: FC<BaseProps> = ({provider}) => {
@@ -20,11 +21,14 @@ const Client: FC<BaseProps> = ({provider}) => {
         setAddress(accounts[0]);
     });
 
+    const isLoggedIn = !!address;
+
     return (
-        <div className="bg-white text-2xl text-black text-4xl container">
+        <div className="bg-white text-black text-4xl container px-4">
             <Welcome metamaskInstalled={true} />
-            <Link to='admin'>goto admin</Link>
-            <Mint address={address}/>
+            {!isLoggedIn && <UnlockAccount />}
+            {/*<Link to='admin'>goto admin</Link>*/}
+            {isLoggedIn && <Mint address={address}/>}
             {address && <MyNfts provider={provider} address={address}/>}
         </div>
     );

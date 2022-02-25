@@ -2,6 +2,8 @@ import React, {FC, useEffect, useState} from "react";
 import {getTokensOf, getTokenURI, ipfs2https, signMessage} from "../utils";
 import QRCode from "react-qr-code";
 import {BaseProps, Nft} from "../Types/types";
+import NftCard from "./NftCard";
+import Signature from "./Signature";
 
 type MyNftsProps = {
     address: string,
@@ -30,7 +32,7 @@ const MyNfts: FC<MyNftsProps> = ({provider, address}) => {
         return {url: ipfs2https(metadata.image), id, name: metadata.name};
     }
 
-    const handleSign = async (e: React.MouseEvent<HTMLImageElement>, id: string) => {
+    const handleSign = async (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
         const sig = await signMessage(provider, id);
         if (!sig) {
             setError("Could not sign");
@@ -42,23 +44,33 @@ const MyNfts: FC<MyNftsProps> = ({provider, address}) => {
     };
 
     return (
-        <div>
-            <div>My nfts:</div>
-            {nfts.map(nft =>
-                <img
-                    key={nft.id}
-                    width={200}
-                    height={200}
-                    src={nft.url}
-                    alt={nft.name}
-                    title={nft.name}
-                    onClick={e => handleSign(e, nft.id)}
-                />
-            )}
+        <>
+            <section className="text-black body-font pb-10">
+                <div className="px-5 mx-auto">
+                    <div className="flex flex-col text-center w-full mb-10">
+                        <h1 className="text-4xl font-medium title-font mb-4 text-black tracking-widest">My NFT's</h1>
+                        <p className="lg:w-2/3 mx-auto leading-relaxed text-base">This is the list of your NFT's. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, velit.</p>
+                    </div>
+                    <div className="flex flex-wrap flex-col xl:flex-row -m-4">
+                        {nfts.map(nft =>
+                            <NftCard
+                                key={nft.id}
+                                src={nft.url}
+                                name={nft.name}
+                                id={nft.id}
+                                handleSign={handleSign}
+                            />
+                        )}
+                    </div>
+                </div>
+            </section>
             {error && <div>Error: {error}</div>}
-            <div>Signature</div>
-            {signature && <QRCode value={signature} level="H"/>}
-        </div>
+            {signature &&
+                <Signature signature={signature}>
+                    <QRCode value={signature} level="H"/>
+                </Signature>
+            }
+        </>
     );
 }
 

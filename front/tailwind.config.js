@@ -14,8 +14,12 @@ module.exports = {
       current: 'currentColor',
       'white': '#f9f9f9',
       'orange': '#fcaf17',
+      'orangeLight': '#ffedce',
       'red': '#fc174c',
-      'green': '#17fc36',
+      'redLight': '#ffe9e9',
+      'green': '#25e140',
+      'greenLight': '#dbffe1',
+      'blue': '#1795fc',
       'black': '#1e2722',
     },
     screens: {

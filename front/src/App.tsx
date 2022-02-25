@@ -4,14 +4,16 @@ import Admin from "./Pages/Admin";
 import Client from "./Pages/Client";
 import {ethers} from "ethers";
 import Welcome from "./Components/Welcome";
+import InstallNow from "./Components/InstallNow";
 
 
 const App = () => {
     if (!window.ethereum) {
         // window.location.href = `https://metamask.app.link/dapp/${window.location.host}`;
         return (
-            <div className="bg-white text-2xl text-black text-4xl container">
-                <Welcome metamaskInstalled={false} />
+            <div className="bg-white text-black text-4xl container">
+                <Welcome />
+                <InstallNow />
             </div>
         );
     }

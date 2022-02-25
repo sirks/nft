@@ -2,6 +2,9 @@ import React, {FC, useState} from "react";
 import {ipfs2https, mint} from "../utils";
 import {MINT_EVENT} from "../environment";
 import {ERR} from "../Types/types";
+import MintInput from "./MintInput";
+import Alert from "./Alert";
+import LastMint from "./LastMint";
 
 type MintProps = {
     address: string,
@@ -14,47 +17,55 @@ const Mint: FC<MintProps> = ({address}) => {
 
     const path = window.location.pathname.slice(1);
     if (!path) {
-        return <></>
+        // return <></>
     }
 
     const onMint = async (address: string, hash: string) => {
         setMinting(true);
         const mintResult = await mint(MINT_EVENT, hash, address);
-        debugger;
+        // debugger;
         let msg = "";
         if (mintResult.err) {
             switch (mintResult.err.code) {
                 case ERR.INCORRECT_DATA:
-                    msg = `could not mint: ${mintResult.err.msg}`;
+                    msg = `Could not mint: ${mintResult.err.msg}`;
                     break;
                 case ERR.TOKEN_USED:
-                    msg = "ticket used";
+                    msg = "Ticket used";
                     break;
                 case ERR.NO_SUCH_TOKEN:
-                    msg = "no such ticket";
+                    msg = "No such ticket";
                     break;
                 default:
                     //unknown error
-                    msg = "thou shalt not mint";
+                    msg = "Thou shalt not mint";
             }
             setErr(msg);
             setMinting(false);
             return;
         }
+        setErr('');
         setMinting(false);
+        console.log(mintResult.data);
         setLastMint(mintResult.data.img);
     }
     return (
-        <div>
-            {lastMintUrl && <div>
-                <div>Your nft is on its way</div>
-                <img src={ipfs2https(lastMintUrl)} width={200} height={200}/>
-            </div>}
-            {minting
-                ? <div>Minting ...</div>
-                : <button style={{backgroundColor: "green"}} onClick={e => onMint(address, path)}>MINT MY NFT</button>
+        <div className="pb-24">
+            <MintInput address={address} pathParam={path} onMint={onMint} />
+            {lastMintUrl &&
+                // <div>
+                //     <div>Your NFT is on its way</div>
+                //     <img src={ipfs2https(lastMintUrl)} width={200} height={200}/>
+                // </div>
+                <LastMint url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} />
             }
-            {err && <div color={"red"}>Error: {err}</div>}
+
+            {minting
+                ? <div className="pb-4">Minting ...</div>
+                : <></>
+                // : <button style={{backgroundColor: "green"}} onClick={e => onMint(address, path)}>MINT MY NFT</button>
+            }
+            {err && <Alert color={'red'} title={'Error'} description={err} />}
         </div>
     );
 }
