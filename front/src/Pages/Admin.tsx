@@ -15,6 +15,7 @@ export type AdminState = {
 
 const Admin: FC<BaseProps> = ({}) => {
     const [state, setState] = useState<AdminState>({msg: "Reading", success: false, stop: false});
+    const [eventName, setEventName] = useState<string>('');
     const stateRef = useRef<AdminState>(state);
     stateRef.current = state;
 
@@ -40,7 +41,7 @@ const Admin: FC<BaseProps> = ({}) => {
             setState({msg: `Could not verify: ${verifyResp.nok}`, success, stop});
             return;
         }
-        const serverResp: BaseRestResp = await entrance(ENTRANCE_EVENT, tokenId, signature);
+        const serverResp: BaseRestResp = await entrance(eventName, tokenId, signature);
         let msg = "";
         if (serverResp.err) {
             switch (serverResp.err.code) {
@@ -94,6 +95,16 @@ const Admin: FC<BaseProps> = ({}) => {
                     containerStyle={{height: 300, width: 300}}
                     onResult={onRead}
                 />
+            </div>
+            <div className="min-w-[300px] relative pb-4">
+                <input
+                    value={eventName}
+                    onChange={e => setEventName(e.target.value)}
+                    type="text"
+                    id="mint"
+                    name="mint"
+                    placeholder="Event name..."
+                    className="w-full bg-gray-100 bg-opacity-50 border border-gray-300 text-base outline-none text-black py-4 px-3 leading-8 transition-colors duration-200 ease-in-out" />
             </div>
             <div className="min-w-[300px]">
                 {state.msg && <Alert color={state.success ? 'green' : 'red'} title={state.success ? 'Success' : 'Error'} description={state.msg} />}

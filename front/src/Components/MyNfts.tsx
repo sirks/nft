@@ -4,6 +4,7 @@ import QRCode from "react-qr-code";
 import {BaseProps, Nft} from "../Types/types";
 import NftCard from "./NftCard";
 import Signature from "./Signature";
+import Alert from "./Alert";
 
 type MyNftsProps = {
     address: string,
@@ -64,7 +65,7 @@ const MyNfts: FC<MyNftsProps> = ({provider, address}) => {
                     </div>
                 </div>
             </section>
-            {error && <div>Error: {error}</div>}
+            {error && <Alert color={'red'} title={'Error'} description={error} />}
             {signature &&
                 <Signature signature={signature}>
                     <QRCode value={signature} level="H"/>

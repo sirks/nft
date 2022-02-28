@@ -17,7 +17,8 @@ const Client: FC<BaseProps> = ({provider}) => {
         initAccount();
     }, []);
 
-    provider.on('accountsChanged', (accounts: string[]) => {
+    window.ethereum.on('accountsChanged', (accounts: string[]) => {
+        debugger
         setAddress(accounts[0]);
     });
 

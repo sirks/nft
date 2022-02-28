@@ -14,7 +14,7 @@ const UnlockAccount = () => {
                     </div>
                     <div className="flex-grow">
                         <h2 className="text-black text-2xl title-font font-medium mb-3">Need to unlock</h2>
-                        <p className="leading-relaxed text-base">It seems that you have installed metamask on your device but you need to unlock it. Please, do it! Then refresh the page!</p>
+                        <p className="leading-relaxed text-base">It seems that you have installed metamask on your device but you need to unlock it. Please, do it!</p>
                     </div>
                 </div>
             </div>

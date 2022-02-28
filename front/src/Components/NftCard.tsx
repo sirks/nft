@@ -22,9 +22,9 @@ const NftCard: FC<NftCardProps> = ({name, src, id, handleSign, minted}) => {
                     <h3 className="text-black mb-3">{name}</h3>
                     {handleSign && id &&
                         <button
-                            className="flex mt-16 text-white bg-orange border-0 py-4 px-14 focus:outline-none hover:text-black text-lg font-machina uppercase"
+                            className="flex mt-16 text-black hover:text-white border-2 border-black hover:border-orange hover:bg-orange py-4 px-14 focus:outline-none hover:text-black text-sm font-machina uppercase"
                             onClick={e => handleSign(e, id)}
-                        >Signature
+                        >generate ticket
                         </button>
                     }
 

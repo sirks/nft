@@ -5,6 +5,7 @@ import {ERR} from "../Types/types";
 import MintInput from "./MintInput";
 import Alert from "./Alert";
 import LastMint from "./LastMint";
+import {useParams} from "react-router-dom";
 
 type MintProps = {
     address: string,
@@ -15,9 +16,11 @@ const Mint: FC<MintProps> = ({address}) => {
     const [err, setErr] = useState<string>("");
     const [lastMintUrl, setLastMint] = useState<string>("");
 
-    const path = window.location.pathname.slice(1);
+    const {mintId: path} = useParams();
+
+    // const path = window.location.pathname.slice(1);
     if (!path) {
-        // return <></>
+        return <></>
     }
 
     const onMint = async (address: string, hash: string) => {
