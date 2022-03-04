@@ -16,6 +16,7 @@ const LastMint: FC<LastMintProps> = ({ url, name}) => {
                 </div>
                 <div className="flex flex-wrap flex-col xl:flex-row -m-4 w-full">
                     <NftCard
+                        signature=''
                         src={url}
                         name={name}
                         minted={true}

@@ -24,36 +24,42 @@ const Mint: FC<MintProps> = ({address}) => {
     }
 
     const onMint = async (address: string, hash: string) => {
-        setMinting(true);
-        const mintResult = await mint(MINT_EVENT, hash, address);
-        // debugger;
-        let msg = "";
-        if (mintResult.err) {
-            switch (mintResult.err.code) {
-                case ERR.INCORRECT_DATA:
-                    msg = `Could not mint: ${mintResult.err.msg}`;
-                    break;
-                case ERR.TOKEN_USED:
-                    msg = "Ticket used";
-                    break;
-                case ERR.NO_SUCH_TOKEN:
-                    msg = "No such ticket";
-                    break;
-                default:
-                    //unknown error
-                    msg = "Thou shalt not mint";
+        try {
+            setMinting(true);
+            const mintResult = await mint(MINT_EVENT, hash, address);
+            // debugger;
+            let msg = "";
+            if (mintResult.err) {
+                switch (mintResult.err.code) {
+                    case ERR.INCORRECT_DATA:
+                        msg = `Could not mint: ${mintResult.err.msg}`;
+                        break;
+                    case ERR.TOKEN_USED:
+                        msg = "Ticket used";
+                        break;
+                    case ERR.NO_SUCH_TOKEN:
+                        msg = "No such ticket";
+                        break;
+                    default:
+                        //unknown error
+                        msg = "Thou shalt not mint";
+                }
+                setErr(msg);
+                setMinting(false);
+                return;
             }
-            setErr(msg);
+            setErr('');
             setMinting(false);
-            return;
+            console.log(mintResult.data);
+            setLastMint(mintResult.data.img);
+        } catch (e: any) {
+            setErr('Something went wrong');
+            setMinting(false);
         }
-        setErr('');
-        setMinting(false);
-        console.log(mintResult.data);
-        setLastMint(mintResult.data.img);
+
     }
     return (
-        <div className="pb-24">
+        <div className="pt-24">
             <MintInput address={address} pathParam={path} onMint={onMint} />
             {lastMintUrl &&
                 // <div>

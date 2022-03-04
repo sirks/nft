@@ -18,7 +18,7 @@ const Client: FC<BaseProps> = ({provider}) => {
     }, []);
 
     window.ethereum.on('accountsChanged', (accounts: string[]) => {
-        debugger
+        // debugger
         setAddress(accounts[0]);
     });
 
@@ -26,8 +26,13 @@ const Client: FC<BaseProps> = ({provider}) => {
 
     return (
         <div className="bg-white text-black text-4xl container px-4">
-            <Welcome metamaskInstalled={true} />
-            {!isLoggedIn && <UnlockAccount />}
+            {/*{!isLoggedIn && <Welcome metamaskInstalled={true}/>}*/}
+            {!isLoggedIn &&
+                <>
+                    <Welcome metamaskInstalled={true}/>
+                    <UnlockAccount />
+                </>
+            }
             {/*<Link to='admin'>goto admin</Link>*/}
             {isLoggedIn && <Mint address={address}/>}
             {address && <MyNfts provider={provider} address={address}/>}

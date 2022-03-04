@@ -89,13 +89,6 @@ const Admin: FC<BaseProps> = ({}) => {
                     <p>Click on camera to reset.</p>
                 </div>
             }
-            <div onClick={reset} className="pb-4">
-                <QrReader
-                    constraints={{facingMode: 'environment', aspectRatio: 1, height: 300, width: 300}}
-                    containerStyle={{height: 300, width: 300}}
-                    onResult={onRead}
-                />
-            </div>
             <div className="min-w-[300px] relative pb-4">
                 <input
                     value={eventName}
@@ -105,6 +98,13 @@ const Admin: FC<BaseProps> = ({}) => {
                     name="mint"
                     placeholder="Event name..."
                     className="w-full bg-gray-100 bg-opacity-50 border border-gray-300 text-base outline-none text-black py-4 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+            </div>
+            <div onClick={reset} className="pb-4">
+                <QrReader
+                    constraints={{facingMode: 'environment', aspectRatio: 1, height: 300, width: 300}}
+                    containerStyle={{height: 300, width: 300}}
+                    onResult={onRead}
+                />
             </div>
             <div className="min-w-[300px]">
                 {state.msg && <Alert color={state.success ? 'green' : 'red'} title={state.success ? 'Success' : 'Error'} description={state.msg} />}
