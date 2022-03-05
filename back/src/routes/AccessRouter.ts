@@ -40,7 +40,7 @@ router.get('/mint', async (req, res) => {
     try {
         const mintResult = await mint(req.query.address, ipfsToken.url)
         console.log("mint ok", JSON.stringify(mintResult));
-    } catch (e) {
+    } catch (e: any) {
         console.log("mint error", e.stack);
         const err: BaseRestResp = {err: {msg: "could not mint ticket", code: ERR.INCORRECT_DATA}}
         res.status(400).send(err);

@@ -6,7 +6,8 @@
     "test": "jest",
     "build": "rm -rf ./build && tsc",
     "start": "node build/index.js",
-    "start:dev": "nodemon"
+    "start:dev": "nodemon",
+    "start:art": "ts-node src/art/generateArt.ts"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
@@ -22,6 +23,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "canvas": "^2.9.0",
     "cors": "^2.8.5",
     "ethers": "^5.5.4",
     "express": "^4.17.1",
