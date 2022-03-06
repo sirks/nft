@@ -28,7 +28,7 @@ const CONTRACT_BASE_URL = `${SERVER}/contract`
 export async function getTokensOf(address: string): Promise<string[]> {
     try {
         return await fetch(`${CONTRACT_BASE_URL}/tokens-of/${address}`).then(r=>r.json());
-    } catch (e: any) {
+    } catch (e) {
         return [];
     }
 

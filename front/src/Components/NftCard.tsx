@@ -47,7 +47,8 @@ const NftCard: FC<NftCardProps> = ({name, src, id, handleSign, minted, signature
                             title={name}
                             alt={name}
                             className="flex-shrink-0 w-[200px] h-[200px] object-cover object-center"
-                            src={src}/>
+                            src={src}
+                        />
                     }
                     {signature && showQR &&
                         <QRCode id={id} value={signature} level="H" size={200}/>

@@ -52,7 +52,7 @@ const Mint: FC<MintProps> = ({address}) => {
             setMinting(false);
             console.log(mintResult.data);
             setLastMint(mintResult.data.img);
-        } catch (e: any) {
+        } catch (e) {
             setErr('Something went wrong');
             setMinting(false);
         }
