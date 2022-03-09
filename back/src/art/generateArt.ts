@@ -1,5 +1,4 @@
-import {createImageData, createCanvas, loadImage} from 'canvas';
-import fs from "fs";
+import {createCanvas, createImageData, loadImage} from 'canvas';
 
 type RGB = {
     rOffset: number,
@@ -14,7 +13,7 @@ const canvas = createCanvas(width, height)
 
 const ctx = canvas.getContext('2d');
 
-export default function generateArt() {
+export default async function generateArt(): Promise<ArrayBufferLike> {
     ctx.fillStyle = "#FCAF17";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -45,22 +44,21 @@ export default function generateArt() {
         ctx.fillRect(x, y, width, height);
     }
 
-    // logo on top
-    loadImage('./src/art/techchill_white.png').then((img) => {
-        ctx.drawImage(img, 0, 0);
+    const img = await loadImage('./src/art/techchill_white.png');
+    ctx.drawImage(img, 0, 0);
 
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-        const updatedImageData = rgbSplit(imageData, {
-            rOffset: 4,
-            gOffset: 0,
-            bOffset: 0
-        });
-        ctx.putImageData(updatedImageData, 0, 0);
-
-        const buffer = canvas.toBuffer('image/png')
-        fs.writeFileSync('./src/art/techchill_NFT_Art.png', buffer)
+    const updatedImageData = rgbSplit(imageData, {
+        rOffset: 4,
+        gOffset: 0,
+        bOffset: 0
     });
+    ctx.putImageData(updatedImageData, 0, 0);
+
+    let arraybuffer = canvas.toBuffer('image/png')
+    let buffer = Buffer.from(arraybuffer);
+    return Uint8Array.from(buffer).buffer;
 }
 
 // min and max included
@@ -85,4 +83,4 @@ function rgbSplit(imageData: ImageData, options: RGB): ImageData {
     return createImageData(newArray, imageData.width, imageData.height);
 }
 
-generateArt();
+// generateArt();
