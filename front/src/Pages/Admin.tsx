@@ -79,7 +79,6 @@ const Admin: FC<BaseProps> = ({}) => {
 
     return (
         <div className="bg-orange min-h-screen flex flex-col justify-center items-center text-black text-4xl">
-            {/*<Link to='/'>goto client</Link>*/}
             {state.stop &&
                 <div className="flex items-center bg-blue text-white text-sm font-bold px-12 py-3 my-4" role="alert">
                     <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

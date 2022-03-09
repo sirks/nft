@@ -61,20 +61,16 @@ const Mint: FC<MintProps> = ({address}) => {
     return (
         <div className="pt-24">
             <MintInput address={address} pathParam={path} onMint={onMint} />
-            {lastMintUrl &&
-                // <div>
-                //     <div>Your NFT is on its way</div>
-                //     <img src={ipfs2https(lastMintUrl)} width={200} height={200}/>
-                // </div>
-                <LastMint url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} />
-            }
-
             {minting
                 ? <div className="pb-4">Minting ...</div>
                 : <></>
-                // : <button style={{backgroundColor: "green"}} onClick={e => onMint(address, path)}>MINT MY NFT</button>
             }
             {err && <Alert color={'red'} title={'Error'} description={err} />}
+
+            {lastMintUrl &&
+                <LastMint url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} />
+            }
+
         </div>
     );
 }
