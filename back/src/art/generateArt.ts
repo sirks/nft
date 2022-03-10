@@ -1,5 +1,5 @@
-import {createCanvas, createImageData, loadImage} from 'canvas';
-import path from "path";
+import {createCanvas, createImageData} from 'canvas';
+import techchill_white from "./techchill_white.png";
 
 type RGB = {
     rOffset: number,
@@ -45,8 +45,7 @@ export default async function generateArt(): Promise<ArrayBufferLike> {
         ctx.fillRect(x, y, width, height);
     }
 
-    const img = await loadImage(path.join(__dirname, 'techchill_white.png'));
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(techchill_white, 0, 0);
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -69,7 +68,7 @@ function randomIntFromInterval(min: number, max: number): number {
 
 function rgbSplit(imageData: ImageData, options: RGB): ImageData {
     // destructure the offset values from options, default to 0
-    const { rOffset = 0, gOffset = 0, bOffset = 0 } = options;
+    const {rOffset = 0, gOffset = 0, bOffset = 0} = options;
     // clone the pixel array from original imageData
     const originalArray = imageData.data;
     const newArray = new Uint8ClampedArray(originalArray);
