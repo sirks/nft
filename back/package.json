@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "jest",
-    "build": "rm -rf ./build && tsc",
+    "build": "rm -rf ./build && tsc && copyfiles -u 2 ./src/art/techchill_white.png ./build/art/",
     "start": "node build/index.js",
     "start:dev": "nodemon",
     "start:art": "ts-node src/art/generateArt.ts"
@@ -16,6 +16,7 @@
     "@types/mongodb": "^3.5.25",
     "@types/multer": "^1.4.3",
     "@types/node": "^17.0.18",
+    "copyfiles": "^2.4.1",
     "jest": "^27.5.1",
     "nodemon": "^2.0.4",
     "ts-jest": "^27.1.3",
