@@ -1,0 +1,1 @@
+node ~/techchill/build/index.js >> ~/techchill/logs/app.log 2>&1 &
