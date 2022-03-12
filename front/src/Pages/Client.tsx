@@ -31,7 +31,7 @@ const Client: FC<BaseProps> = ({provider}) => {
                     <UnlockAccount />
                 </>
             }
-            {isLoggedIn && <Mint address={address}/>}
+            {isLoggedIn && <Mint provider={provider} address={address}/>}
             {address && <MyNfts provider={provider} address={address}/>}
         </div>
     );

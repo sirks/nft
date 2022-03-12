@@ -1,10 +1,8 @@
-import React, {FC, MouseEvent, useRef, useState} from 'react';
+import React, {FC, MouseEvent, useCallback, useRef, useState} from 'react';
 import {QrReader} from 'react-qr-reader';
 import {entrance, verifyMessage} from "../utils";
 import {BaseProps, BaseRestResp, ERR, OK} from "../Types/types";
-import {Link} from "react-router-dom";
 import {OnResultFunction} from "react-qr-reader/src/types/index";
-import {ENTRANCE_EVENT} from "../environment";
 import Alert from "../Components/Alert";
 
 export type AdminState = {
@@ -15,22 +13,27 @@ export type AdminState = {
 
 const Admin: FC<BaseProps> = ({}) => {
     const [state, setState] = useState<AdminState>({msg: "Reading", success: false, stop: false});
-    const [eventName, setEventName] = useState<string>('');
+    const eventRef = useRef<HTMLInputElement>(null);
     const stateRef = useRef<AdminState>(state);
     stateRef.current = state;
 
-    const onRead: OnResultFunction = (result, error) => {
+    const onRead: OnResultFunction = useCallback((result, error) => {
         if (!stateRef.current.stop && result) {
             setState({msg: "Checking qr", success: false, stop: true});
-            onQr(result.getText());
+            console.log('event', eventRef?.current?.value);
+            onQr(result.getText()).then();
         }
-    }
+    }, [state]);
 
-    const onQr = async (txt: string) => {
+    const onQr = useCallback(async (txt: string) => {
         const stop = true;
         const success = false;
-
+        console.log('event name', eventRef?.current!.value);
         const content = txt.split("|");
+        if (!eventRef?.current?.value) {
+            setState({msg: 'Type event name', success, stop});
+            return;
+        }
         if (content.length !== 2) {
             setState({msg: `Incorrect qr code: ${txt}`, success, stop});
             return;
@@ -41,7 +44,7 @@ const Admin: FC<BaseProps> = ({}) => {
             setState({msg: `Could not verify: ${verifyResp.nok}`, success, stop});
             return;
         }
-        const serverResp: BaseRestResp = await entrance(eventName, tokenId, signature);
+        const serverResp: BaseRestResp = await entrance(eventRef?.current!.value, tokenId, signature);
         let msg = "";
         if (serverResp.err) {
             switch (serverResp.err.code) {
@@ -57,6 +60,9 @@ const Admin: FC<BaseProps> = ({}) => {
                 case ERR.TOKEN_STOLEN:
                     msg = "Not your ticket";
                     break;
+                case ERR.NO_SUCH_EVENT:
+                    msg = "Event does not exist";
+                    break;
                 default:
                     //unknown error
                     msg = "Thou shalt not pass";
@@ -71,11 +77,11 @@ const Admin: FC<BaseProps> = ({}) => {
         }
         msg = serverResp.data.code === OK.NEW_VISIT ? "WELCOME" : "WELCOME BACK"
         setState({msg, success: true, stop});
-    }
+    }, [state]);
 
-    const reset = (e: MouseEvent<HTMLDivElement>) => {
+    const reset = useCallback((e: MouseEvent<HTMLDivElement>) => {
         setState({msg: "Reading", success: false, stop: false});
-    }
+    }, [state]);
 
     return (
         <div className="bg-orange min-h-screen flex flex-col justify-center items-center text-black text-4xl">
@@ -90,8 +96,7 @@ const Admin: FC<BaseProps> = ({}) => {
             }
             <div className="min-w-[300px] relative pb-4">
                 <input
-                    value={eventName}
-                    onChange={e => setEventName(e.target.value)}
+                    ref={eventRef}
                     type="text"
                     id="mint"
                     name="mint"

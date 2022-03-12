@@ -1,10 +1,11 @@
 import React, {FC, useEffect, useRef, useState} from "react";
-import {getTokensOf, getTokenURI, ipfs2https, signMessage} from "../utils";
+import {getTokensOf, getTokenURI, ipfs2https} from "../utils";
 import {BaseProps, Nft} from "../Types/types";
 import NftCard from "./NftCard";
 import Alert from "./Alert";
 import Loading from "./Loading";
 import {useOnLoadImages} from "../useOnLoadImages";
+import {useSignature} from "../useSignature";
 
 type MyNftsProps = {
     address: string,
@@ -12,11 +13,10 @@ type MyNftsProps = {
 
 const MyNfts: FC<MyNftsProps> = ({provider, address}) => {
     const [nfts, setNfts] = useState<Nft[]>([]);
-    const [signature, setSignature] = useState<string>("");
-    const [error, setError] = useState<string>("waiting for signature");
 
     const wrapperRef = useRef<HTMLDivElement>(null);
     const {status: imagesLoaded, loadImages} = useOnLoadImages(wrapperRef);
+    const {signature, setSignature, error, setError, handleSign, resetSign} = useSignature(provider);
 
     useEffect(() => {
         try {
@@ -43,21 +43,6 @@ const MyNfts: FC<MyNftsProps> = ({provider, address}) => {
         const uri = await getTokenURI(id);
         const metadata: any = await fetch(ipfs2https(uri)).then(r => r.json());
         return {url: ipfs2https(metadata.image), id, name: metadata.name};
-    }
-
-    const handleSign = async (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
-        const sig = await signMessage(provider, id);
-        if (!sig) {
-            setError("Could not sign");
-            setSignature("");
-            return;
-        }
-        setError("");
-        setSignature(`${id}|${sig}`);
-    };
-
-    const resetSign = (e: React.MouseEvent<HTMLButtonElement>) => {
-        setSignature('');
     }
 
     return (

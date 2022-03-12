@@ -1,7 +1,7 @@
 import React, {FC, useState} from "react";
 import {ipfs2https, mint} from "../utils";
 import {MINT_EVENT} from "../environment";
-import {ERR} from "../Types/types";
+import {BaseProps, ERR} from "../Types/types";
 import MintInput from "./MintInput";
 import Alert from "./Alert";
 import LastMint from "./LastMint";
@@ -9,9 +9,9 @@ import {useParams} from "react-router-dom";
 
 type MintProps = {
     address: string,
-}
+} & BaseProps
 
-const Mint: FC<MintProps> = ({address}) => {
+const Mint: FC<MintProps> = ({address, provider}) => {
     const [minting, setMinting] = useState<boolean>(false);
     const [err, setErr] = useState<string>("");
     const [lastMintUrl, setLastMint] = useState<string>("");
@@ -68,7 +68,7 @@ const Mint: FC<MintProps> = ({address}) => {
             {err && <Alert color={'red'} title={'Error'} description={err} />}
 
             {lastMintUrl &&
-                <LastMint url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} />
+                <LastMint id={'55'} provider={provider} url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} />
             }
 
         </div>
