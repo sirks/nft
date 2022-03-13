@@ -60,9 +60,6 @@ const Admin: FC<BaseProps> = ({}) => {
                 case ERR.TOKEN_STOLEN:
                     msg = "Not your ticket";
                     break;
-                case ERR.NO_SUCH_EVENT:
-                    msg = "Event does not exist";
-                    break;
                 default:
                     //unknown error
                     msg = "Thou shalt not pass";

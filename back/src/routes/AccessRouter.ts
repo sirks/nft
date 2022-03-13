@@ -72,11 +72,6 @@ router.get('/entrance', async (req, res) => {
     }
     const entrance = await dao.findToken(req.query.event, req.query.token)
     const address = recoverAddress(req.query.token, req.query.signature)
-    if (!entrance) {
-        const err: BaseRestResp = {err: {msg: "no such event", code: ERR.NO_SUCH_EVENT}}
-        res.status(404).send(err);
-        return;
-    }
     if (entrance && entrance.address) {
         if (entrance.address === address) {
             const ok: BaseRestResp = {data: {code: OK.RETURNING_VISIT}}
