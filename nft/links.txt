@@ -2,3 +2,4 @@ https://betterprogramming.pub/how-to-create-an-nft-contract-without-coding-skill
 https://docs.openzeppelin.com/contracts/4.x/wizard
 https://faucets.chain.link/rinkeby
 https://nft.storage/
+https://remix.ethereum.org/

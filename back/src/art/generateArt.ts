@@ -1,5 +1,5 @@
-import {createCanvas, createImageData} from 'canvas';
-import techchill_white from "./techchill_white.png";
+import {createCanvas, createImageData, loadImage} from 'canvas';
+import path from "path";
 
 type RGB = {
     rOffset: number,
@@ -45,7 +45,8 @@ export default async function generateArt(): Promise<ArrayBufferLike> {
         ctx.fillRect(x, y, width, height);
     }
 
-    ctx.drawImage(techchill_white, 0, 0);
+    const img = await loadImage(path.join(__dirname, 'techchill_white.png'));
+    ctx.drawImage(img, 0, 0);
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 

@@ -1431,7 +1431,7 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
 pragma solidity ^0.8.4;
 
 
-contract CrispyCoin is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+contract TechchillCoin is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
@@ -1441,7 +1441,7 @@ contract CrispyCoin is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     //event => address => token
     mapping(string => mapping(address => uint256)) private attendanceByClient;
 
-    constructor() ERC721("Crispy Coin", "CCC") {}
+    constructor() ERC721("Techchill Coin", "TCC") {}
 
     function safeMint(address to, string memory uri) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
@@ -1492,18 +1492,18 @@ contract CrispyCoin is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         return _tokensOfOwner;
     }
 
-    function attend(string event_, uint256 tokenId, address client) public onlyOwner {
-        owner = ERC721.ownerOf(tokenId);
-        require(attender == owner);
+    function attend(string memory event_, uint256 tokenId, address client) public onlyOwner {
+        address owner = ERC721.ownerOf(tokenId);
+        require(client == owner);
         attendanceByToken[event_][tokenId] = client;
         attendanceByClient[event_][client] = tokenId;
     }
 
-    function attendedWithToken(string event_, uint256 tokenId) public view returns (address) {
+    function attendedWithToken(string memory event_, uint256 tokenId) public view returns (address) {
         return attendanceByToken[event_][tokenId];
     }
 
-    function attendedByClient(string event_, address client) public view returns (uint256) {
+    function attendedByClient(string memory event_, address client) public view returns (uint256) {
         return attendanceByClient[event_][client];
     }
 }
