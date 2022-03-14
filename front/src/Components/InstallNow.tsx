@@ -1,6 +1,9 @@
-import React from 'react';
+import React, {FC} from 'react';
 
-const InstallNow = () => {
+type InstallNowProps = {
+    url: string;
+}
+const InstallNow: FC<InstallNowProps> = ({url}) => {
     return (
         <div className="flex flex-wrap justify-center">
             <div className="p-4 lg:w-2/3 md:w-full">
@@ -14,8 +17,8 @@ const InstallNow = () => {
                     </div>
                     <div className="flex-grow">
                         <h2 className="text-black text-2xl title-font font-medium mb-3">Ooops...</h2>
-                        <p className="leading-relaxed text-base">It seems that you have not installed metamask on your device yet. Install and then try again.</p>
-                        <a className="mt-3 text-black inline-flex items-center" href="https://metamask.app.link/dapp/" target="_blank">Install Now
+                        <p className="leading-relaxed text-base">It seems that you are browsing from mobile device and need to connect via mobile app.</p>
+                        <a className="mt-3 text-black inline-flex items-center" href={url} target="_self">Metamask mobile
                             <svg fill="none" stroke="currentColor" strokeLinecap="round"
                                  strokeLinejoin="round" strokeWidth="2" className="w-10 h-10 ml-2"
                                  viewBox="0 0 24 24">
