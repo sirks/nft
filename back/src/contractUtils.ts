@@ -7,13 +7,14 @@ const ABI = [
     "function tokenURI(uint256 tokenId) public view returns (string memory)",
     "function ownerOf(uint256 tokenId) public view returns (address)",
 ]
+const MINT_GAS_LIMIT = 100000
 
 const provider = new ethers.providers.JsonRpcProvider(BLOCKCHAIN_URL);
 const signer = new ethers.Wallet(PRIVATE_KEY, provider);
 const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
 export async function mint(to: string, uri: string): Promise<string> {
-    return await contract.safeMint(to, uri);
+    return await contract.safeMint(to, uri, {gasLimit: MINT_GAS_LIMIT});
 }
 
 export default function recoverAddress(msg: string, signature: string): string {
