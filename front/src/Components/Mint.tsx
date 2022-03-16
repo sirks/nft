@@ -9,19 +9,29 @@ import {useParams} from "react-router-dom";
 
 type MintProps = {
     address: string,
+    path: string,
+    minting: boolean,
+    setMinting: (value: boolean | ((prevVar: boolean) => boolean)) => void,
+    err: string,
+    setErr: (value: string | ((prevVar: string) => string)) => void,
+    lastMintUrl: string,
+    setLastMint: (value: string | ((prevVar: string) => string)) => void,
 } & BaseProps
 
-const Mint: FC<MintProps> = ({address, provider}) => {
-    const [minting, setMinting] = useState<boolean>(false);
-    const [err, setErr] = useState<string>("");
-    const [lastMintUrl, setLastMint] = useState<string>("");
-
-    const {mintId: path} = useParams();
-
-    // const path = window.location.pathname.slice(1);
-    if (!path) {
-        return <></>
-    }
+const Mint: FC<MintProps> = ({
+                                 address,
+                                 provider,
+                                 path,
+                                 minting,
+                                 setMinting,
+                                 err,
+                                 setErr,
+                                 lastMintUrl,
+                                 setLastMint,
+}) => {
+    // const [minting, setMinting] = useState<boolean>(false);
+    // const [err, setErr] = useState<string>("");
+    // const [lastMintUrl, setLastMint] = useState<string>("");
 
     const onMint = async (address: string, hash: string) => {
         try {
@@ -59,17 +69,21 @@ const Mint: FC<MintProps> = ({address, provider}) => {
 
     }
     return (
-        <div className="pt-24">
-            <MintInput address={address} pathParam={path} onMint={onMint} />
-            {minting
-                ? <div className="pb-4">Minting ...</div>
-                : <></>
+        <div className="mt-6">
+            {!lastMintUrl && <MintInput minting={minting} address={address} pathParam={path} onMint={onMint}/>}
+            {/*{minting*/}
+            {/*    ? <div className="text-center uppercase">Minting ...</div>*/}
+            {/*    : <></>*/}
+            {/*}*/}
+            {err &&
+                <div className="mt-6">
+                    <Alert color={'red'} title={'Error'} description={err} />
+                </div>
             }
-            {err && <Alert color={'red'} title={'Error'} description={err} />}
 
-            {lastMintUrl &&
-                <LastMint id={'55'} provider={provider} url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} />
-            }
+            {/*{lastMintUrl &&*/}
+            {/*    <LastMint provider={provider} url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} />*/}
+            {/*}*/}
 
         </div>
     );
