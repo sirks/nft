@@ -24,9 +24,8 @@ const LastMint: FC<LastMintProps> = ({ url, name, provider, signature, resetSign
         showQR = true;
     }
 
-    console.log(signature);
     return (
-                <div ref={wrapperRef} className="mx-auto">
+                <div ref={wrapperRef} className="flex justify-center mt-6">
                     {!imageLoaded &&
                         <div className="w-[256px] h-[256px] flex justify-center items-center pt-[40px] mx-auto mt-6">
                             <Loading />
@@ -42,7 +41,7 @@ const LastMint: FC<LastMintProps> = ({ url, name, provider, signature, resetSign
                         />
                     }
                     {signature && showQR &&
-                        <QRCode value={signature} level="H" size={256} onClick={e => resetSign()}/>
+                        <QRCode className="mt-6" value={signature} level="H" size={256} onClick={e => resetSign()}/>
                     }
                 </div>
     );

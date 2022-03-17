@@ -18,7 +18,7 @@ type WelcomeProps = {
 
 const Welcome: FC<WelcomeProps> = ({ metamaskInstalled, lastMintUrl, provider, signature, setSignature, resetSign }) => {
 
-    console.log('last mint url', lastMintUrl);
+
     return (
         <section className="text-black body-font">
             <div className="pt-5 lg:pt-12">
@@ -43,8 +43,8 @@ const Welcome: FC<WelcomeProps> = ({ metamaskInstalled, lastMintUrl, provider, s
                         <div className="pb-4 mt-6 flex md:flex-nowrap flex-wrap justify-center items-end md:justify-start flex-col md:flex-row">
                             <button
                                 className="flex mx-auto text-white bg-orange border-0 w-full w-auto justify-center py-4 px-14 focus:outline-none hover:text-black text-2xl sm:text-3xl font-black uppercase"
-                                onClick={e => setSignature(lastMintUrl)}
-                            >Generate QR
+                                onClick={e => signature ? resetSign() : setSignature(window.location.pathname.slice(1))}
+                            >{signature ? 'Show NFT' : 'Generate QR'}
                             </button>
                         </div>
                     }
