@@ -11,7 +11,7 @@ type LastMintProps = {
     resetSign: () => void,
 } & BaseProps;
 
-const LastMint: FC<LastMintProps> = ({ url, name, provider, signature, resetSign}) => {
+const LastMint: FC<LastMintProps> = ({ url, name, signature}) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const {status: imageLoaded, loadImages} = useOnLoadImages(wrapperRef);
 
@@ -37,11 +37,10 @@ const LastMint: FC<LastMintProps> = ({ url, name, provider, signature, resetSign
                             alt={name}
                             className={`${!imageLoaded ? 'hidden' : ''} flex-shrink-0 w-[256px] h-[256px] object-cover object-center mx-auto mt-6`}
                             src={url}
-                            onClick={e => resetSign()}
                         />
                     }
                     {signature && showQR &&
-                        <QRCode className="mt-6" value={signature} level="H" size={256} onClick={e => resetSign()}/>
+                        <QRCode className="mt-6" value={signature} level="H" size={256} />
                     }
                 </div>
     );

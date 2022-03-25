@@ -1,5 +1,5 @@
 export type BaseEntity = { _id?: string, ts?: number }
-export type AccessEntity = BaseEntity & { event: string, token: string, address?: string, processing?: boolean }
+export type AccessEntity = BaseEntity & { event: string, token: string, address?: string, processing?: boolean, img?: string, transactionHash?: string }
 
 export enum ERR {
     INCORRECT_DATA = -1,

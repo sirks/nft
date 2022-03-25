@@ -1,11 +1,9 @@
-import React, {FC, useState} from "react";
-import {ipfs2https, mint} from "../utils";
+import React, {FC, useEffect} from "react";
+import {checkIfMinted, mint} from "../utils";
 import {MINT_EVENT} from "../environment";
 import {BaseProps, ERR} from "../Types/types";
 import MintInput from "./MintInput";
 import Alert from "./Alert";
-import LastMint from "./LastMint";
-import {useParams} from "react-router-dom";
 
 type MintProps = {
     address: string,
@@ -20,7 +18,6 @@ type MintProps = {
 
 const Mint: FC<MintProps> = ({
                                  address,
-                                 provider,
                                  path,
                                  minting,
                                  setMinting,
@@ -32,6 +29,20 @@ const Mint: FC<MintProps> = ({
     // const [minting, setMinting] = useState<boolean>(false);
     // const [err, setErr] = useState<string>("");
     // const [lastMintUrl, setLastMint] = useState<string>("");
+
+    useEffect(() => {
+        const isMinted = async () => {
+            try {
+                console.log('first render');
+                const mintResult = await checkIfMinted(MINT_EVENT, path, address);
+                console.log(mintResult);
+            } catch (e) {
+                setErr('Something went wrong');
+                setMinting(false);
+            }
+        }
+        isMinted();
+    }, []);
 
     const onMint = async (address: string, hash: string) => {
         try {
