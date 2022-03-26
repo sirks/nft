@@ -14,6 +14,8 @@ export enum ERR {
     NO_SUCH_TOKEN = -2,
     TOKEN_USED = -3,
     TOKEN_STOLEN = -4,
+    TOKEN_NOT_MINTED = -5,
+    TOKEN_SCANNED = -6,
 }
 
 export enum OK {

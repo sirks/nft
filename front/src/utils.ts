@@ -56,8 +56,8 @@ export async function checkIfMinted(event: string, hash: string, address: string
         .then(r=>r.json());
 }
 
-export async function entrance(event: string, token: string, signature: string): Promise<BaseRestResp> {
-    return await fetch(`${ACCESS_BASE_URL}/entrance?event=${event}&token=${token}&signature=${signature}`)
+export async function entrance(event: string, token: string): Promise<BaseRestResp> {
+    return await fetch(`${ACCESS_BASE_URL}/entrance?event=${event}&token=${token}`)
         .then(r=>r.json());
 }
 

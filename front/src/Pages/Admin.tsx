@@ -28,23 +28,23 @@ const Admin: FC<BaseProps> = ({}) => {
     const onQr = useCallback(async (txt: string) => {
         const stop = true;
         const success = false;
-        console.log('event name', eventRef?.current!.value);
-        const content = txt.split("|");
+        // console.log('event name', eventRef?.current!.value);
+        // const content = txt.split("|");
         if (!eventRef?.current?.value) {
             setState({msg: 'Type event name', success, stop});
             return;
         }
-        if (content.length !== 2) {
-            setState({msg: `Incorrect qr code: ${txt}`, success, stop});
-            return;
-        }
-        const [tokenId, signature] = content;
-        const verifyResp = verifyMessage(tokenId, signature)
-        if (verifyResp.nok) {
-            setState({msg: `Could not verify: ${verifyResp.nok}`, success, stop});
-            return;
-        }
-        const serverResp: BaseRestResp = await entrance(eventRef?.current!.value, tokenId, signature);
+        // if (txt.length !== 2) {
+        //     setState({msg: `Incorrect qr code: ${txt}`, success, stop});
+        //     return;
+        // }
+        // const [tokenId, signature] = content;
+        // const verifyResp = verifyMessage(tokenId, signature)
+        // if (verifyResp.nok) {
+        //     setState({msg: `Could not verify: ${verifyResp.nok}`, success, stop});
+        //     return;
+        // }
+        const serverResp: BaseRestResp = await entrance(eventRef?.current!.value, txt);
         let msg = "";
         if (serverResp.err) {
             switch (serverResp.err.code) {
@@ -60,9 +60,15 @@ const Admin: FC<BaseProps> = ({}) => {
                 case ERR.TOKEN_STOLEN:
                     msg = "Not your ticket";
                     break;
+                case ERR.TOKEN_NOT_MINTED:
+                    msg = "Token not minted";
+                    break;
+                case ERR.TOKEN_SCANNED:
+                    msg = "You already scanned";
+                    break;
                 default:
                     //unknown error
-                    msg = "Thou shalt not pass";
+                    msg = "Thou shalt not pass " + serverResp.err.code;
             }
             setState({msg, success, stop});
             return;
@@ -108,7 +114,7 @@ const Admin: FC<BaseProps> = ({}) => {
                 />
             </div>
             <div className="min-w-[300px]">
-                {state.msg && <Alert color={state.success ? 'green' : 'red'} title={state.success ? 'Success' : 'Error'} description={state.msg} />}
+                {state.msg && <Alert color={state.success ? 'green' : 'red'} title={state.success ? 'Success' : 'Warning'} description={state.msg} />}
                 {state.success && <Alert color={'green'} title={'Scanned'} description={'This guy can pass'} />}
             </div>
         </div>

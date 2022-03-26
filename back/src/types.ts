@@ -1,11 +1,13 @@
 export type BaseEntity = { _id?: string, ts?: number }
-export type AccessEntity = BaseEntity & { event: string, token: string, address?: string, processing?: boolean, img?: string, transactionHash?: string }
+export type AccessEntity = BaseEntity & { event: string, token: string, address?: string, processing?: boolean, img?: string, transactionHash?: string, entrances?: string[] }
 
 export enum ERR {
     INCORRECT_DATA = -1,
     NO_SUCH_TOKEN = -2,
     TOKEN_USED = -3,
     TOKEN_STOLEN = -4,
+    TOKEN_NOT_MINTED = -5,
+    TOKEN_SCANNED = -6,
 }
 
 export enum OK {
