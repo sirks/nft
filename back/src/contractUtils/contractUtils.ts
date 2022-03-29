@@ -1,5 +1,5 @@
-import {ethers} from "ethers";
-import {BLOCKCHAIN_URL, CONTRACT_ADDRESS, PRIVATE_KEY} from "./config/config";
+import {BigNumber, ethers} from "ethers";
+import {BLOCKCHAIN_URL, CONTRACT_ADDRESS, PRIVATE_KEY} from "../config/config";
 
 const ABI = [
     "function safeMint(address to, string memory uri) public",
@@ -31,4 +31,11 @@ export async function tokenURI(token: string): Promise<string> {
 
 export async function ownerOf(token: string): Promise<string> {
     return await contract.ownerOf(token);
+}
+
+export async function tokenIdBy(transactionHash: string): Promise<number | undefined> {
+    const transaction = await provider.getTransactionReceipt(transactionHash);
+    if (transaction) {
+        return BigNumber.from(transaction.logs[0].topics[3]).toNumber();
+    }
 }
