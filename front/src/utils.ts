@@ -51,6 +51,11 @@ export async function mint(event: string, hash: string, address: string): Promis
         .then(r=>r.json());
 }
 
+export async function getMinted(event: string, hash: string, address: string): Promise<BaseRestResp> {
+    return await fetch(`${ACCESS_BASE_URL}/get-minted?event=${event}&token=${hash}&address=${address}`)
+        .then(r=>r.json());
+}
+
 export async function checkIfMinted(event: string, hash: string, address: string): Promise<BaseRestResp> {
     return await fetch(`${ACCESS_BASE_URL}/is-minted?event=${event}&token=${hash}&address=${address}`)
         .then(r=>r.json());

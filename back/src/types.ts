@@ -1,5 +1,6 @@
 export type BaseEntity = { _id?: string, ts?: number }
-export type AccessEntity = BaseEntity & { event: string, token: string, address?: string, processing?: boolean, img?: string, transactionHash?: string, entrances?: string[] }
+export type AccessEntity = BaseEntity & { event: string, token: string, address?: string, processing?: boolean, img?: string, transactionHash?: string, entrances?: string[], tokenId?: number }
+export type Metadata = { name: string, description: string, image: string }
 
 export enum ERR {
     INCORRECT_DATA = -1,

@@ -3,15 +3,17 @@ import {useOnLoadImages} from "../useOnLoadImages";
 import QRCode from "react-qr-code";
 import Loading from "./Loading";
 import {BaseProps} from "../Types/types";
+import {OPENSEA_ASSETS} from "../environment";
 
 type LastMintProps = {
     url: string;
     name: string;
     signature: string,
     resetSign: () => void,
+    tokenId: string,
 } & BaseProps;
 
-const LastMint: FC<LastMintProps> = ({ url, name, signature}) => {
+const LastMint: FC<LastMintProps> = ({ url, name, signature, tokenId }) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const {status: imageLoaded, loadImages} = useOnLoadImages(wrapperRef);
 
@@ -25,7 +27,7 @@ const LastMint: FC<LastMintProps> = ({ url, name, signature}) => {
     }
 
     return (
-                <div ref={wrapperRef} className="flex justify-center mt-6">
+                <div ref={wrapperRef} className="flex justify-center">
                     {!imageLoaded &&
                         <div className="w-[256px] h-[256px] flex justify-center items-center pt-[40px] mx-auto mt-6">
                             <Loading />
@@ -35,8 +37,9 @@ const LastMint: FC<LastMintProps> = ({ url, name, signature}) => {
                         <img
                             title={name}
                             alt={name}
-                            className={`${!imageLoaded ? 'hidden' : ''} flex-shrink-0 w-[256px] h-[256px] object-cover object-center mx-auto mt-6`}
+                            className={`${!imageLoaded ? 'hidden' : ''} ${tokenId ? 'cursor-pointer' : ''} flex-shrink-0 w-[256px] h-[256px] object-cover object-center mx-auto mt-6`}
                             src={url}
+                            onClick={e => tokenId && window.open(OPENSEA_ASSETS + tokenId, "_blank")}
                         />
                     }
                     {signature && showQR &&

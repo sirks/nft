@@ -25,6 +25,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "axios": "^0.26.1",
     "canvas": "^2.9.0",
     "cors": "^2.8.5",
     "ethers": "^5.5.4",

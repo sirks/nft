@@ -1,5 +1,5 @@
 import express from 'express';
-import {ownerOf, tokensOf, tokenURI} from "../contractUtils";
+import {ownerOf, tokensOf, tokenURI} from "../contractUtils/contractUtils";
 
 const router = express.Router();
 

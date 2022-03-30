@@ -1,6 +1,5 @@
 import {File, NFTStorage} from "nft.storage";
 import {NFT_STORAGE_KEY} from "../config/config";
-import fs from "fs";
 import path from "path";
 import generateArt from "../art/generateArt";
 
@@ -20,7 +19,9 @@ export async function dummyStore() {
 }
 
 export async function store(image: File, name: string, description: string) {
-    const stored = await nftStorage.store({image, name, description});
-    console.log(stored);
-    return stored;
+    return await nftStorage.store({image, name, description});
+}
+
+export function ipfs2https(uri: string) {
+    return uri.replace("ipfs://", "https://ipfs.io/ipfs/");
 }

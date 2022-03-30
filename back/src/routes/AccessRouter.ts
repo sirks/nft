@@ -1,9 +1,10 @@
 import express from 'express';
 import Access from '../dao/Access';
-import {BaseRestResp, ERR, OK} from "../types";
-import {dummyStore} from "../ipfs/ipfsUtils";
-import recoverAddress, {mint, ownerOf} from "../contractUtils";
+import {BaseRestResp, ERR, Metadata, OK} from "../types";
+import {dummyStore, ipfs2https} from "../ipfs/ipfsUtils";
+import {mint, tokenIdBy, tokenURI} from "../contractUtils/contractUtils";
 import {isAddress} from "ethers/lib/utils";
+import axios, {AxiosResponse} from "axios";
 
 async function mintMiddleware(req: express.Request, res: express.Response, next) {
     if (
@@ -111,7 +112,7 @@ router.get('/is-minted', mintMiddleware, async (req, res) => {
     try {
         const isMinted: BaseRestResp = {data: false};
         const client = res.locals.client;
-        if (client.address && !client.processing && client.transactionHash) {
+        if ((client.address && !client.processing) || client.transactionHash) {
             isMinted.data = true;
         }
         res.send(isMinted);
@@ -121,5 +122,50 @@ router.get('/is-minted', mintMiddleware, async (req, res) => {
         return;
     }
 });
+
+router.get('/get-minted', mintMiddleware, async (req: express.Request, res: express.Response) => {
+    try {
+        const client = res.locals.client;
+        const ok: BaseRestResp = {data: {}};
+        if (client.img && client.tokenId) {
+            ok.data.img = client.img;
+            ok.data.tokenId = client.tokenId;
+            res.send(ok);
+            return;
+        }
+
+        if (client.transactionHash) {
+            console.log('has transactionHash', client.transactionHash);
+            const tokenId = await tokenIdBy(client.transactionHash);
+            if (typeof tokenId === "number") {
+                console.log(tokenId);
+                client.tokenId = tokenId;
+                const tokenUrl = await tokenURI(tokenId.toString());
+                const metadataJson: AxiosResponse<Metadata> = await axios.get<Metadata>(ipfs2https(tokenUrl));
+                if (metadataJson.status === 200 && metadataJson.data.image) {
+                    const img = metadataJson.data.image;
+                    client.img = img;
+                    ok.data.img = img;
+                }
+                await dao.update(client);
+            } else {
+                const err: BaseRestResp = {err: {msg: "Not token id", code: ERR.INCORRECT_DATA}};
+                res.status(400).send(err);
+                return;
+            }
+
+        } else {
+            const err: BaseRestResp = {err: {msg: "Dont have transaction hash", code: ERR.INCORRECT_DATA}};
+            res.status(400).send(err);
+            return;
+        }
+        res.send(ok);
+    } catch (e) {
+        console.log(e.stack);
+        const err: BaseRestResp = {err: {msg: "Something went wrong", code: ERR.INCORRECT_DATA}};
+        res.status(400).send(err);
+        return;
+    }
+})
 
 export default router;

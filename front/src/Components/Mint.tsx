@@ -1,5 +1,5 @@
-import React, {FC, useEffect} from "react";
-import {checkIfMinted, mint} from "../utils";
+import React, {FC, useEffect, useState} from "react";
+import {checkIfMinted, getMinted, mint} from "../utils";
 import {MINT_EVENT} from "../environment";
 import {BaseProps, ERR} from "../Types/types";
 import MintInput from "./MintInput";
@@ -14,6 +14,7 @@ type MintProps = {
     setErr: (value: string | ((prevVar: string) => string)) => void,
     lastMintUrl: string,
     setLastMint: (value: string | ((prevVar: string) => string)) => void,
+    setTokenId: (value: string | ((prevVar: string) => string)) => void,
 } & BaseProps
 
 const Mint: FC<MintProps> = ({
@@ -25,25 +26,46 @@ const Mint: FC<MintProps> = ({
                                  setErr,
                                  lastMintUrl,
                                  setLastMint,
+                                 setTokenId,
 }) => {
-    // const [minting, setMinting] = useState<boolean>(false);
-    // const [err, setErr] = useState<string>("");
-    // const [lastMintUrl, setLastMint] = useState<string>("");
+    const [isMinted, setIsMinted] = useState<boolean>(false);
 
     useEffect(() => {
         const isMinted = async () => {
             try {
-                console.log('first render');
+                setMinting(true);
                 const mintResult = await checkIfMinted(MINT_EVENT, path, address);
                 console.log(mintResult);
+                if (mintResult.data)
+                    setIsMinted(true);
+                setMinting(false);
             } catch (e) {
                 setErr('Something went wrong');
                 setMinting(false);
             }
         }
-        isMinted();
+        isMinted().then();
     }, []);
 
+    const getTicket = async (hash: string) => {
+        try {
+            setMinting(true);
+            const mintResult = await getMinted(MINT_EVENT, hash, address);
+            if (mintResult.err) {
+                setErr('Cant generate ticket');
+                setMinting(false);
+                return;
+            }
+            setErr('');
+            setMinting(false);
+            console.log(mintResult.data);
+            setLastMint(mintResult.data.img);
+            setTokenId(mintResult.data.tokenId);
+        } catch (e) {
+            setErr('Something went wrong');
+            setMinting(false);
+        }
+    }
     const onMint = async (address: string, hash: string) => {
         try {
             setMinting(true);
@@ -81,20 +103,13 @@ const Mint: FC<MintProps> = ({
     }
     return (
         <div className="mt-6">
-            {!lastMintUrl && <MintInput minting={minting} address={address} pathParam={path} onMint={onMint}/>}
-            {/*{minting*/}
-            {/*    ? <div className="text-center uppercase">Minting ...</div>*/}
-            {/*    : <></>*/}
-            {/*}*/}
+            {!lastMintUrl && <MintInput minting={minting} address={address} pathParam={path} onMint={onMint} isMinted={isMinted} getMinted={getTicket}/>}
+
             {err &&
                 <div className="mt-6">
                     <Alert color={'red'} title={'Error'} description={err} />
                 </div>
             }
-
-            {/*{lastMintUrl &&*/}
-            {/*    <LastMint provider={provider} url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} />*/}
-            {/*}*/}
 
         </div>
     );

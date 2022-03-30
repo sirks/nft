@@ -11,9 +11,10 @@ type WelcomeProps = {
     signature: string,
     setSignature: (value: string | ((prevVar: string) => string)) => void,
     resetSign: () => void,
+    tokenId: string,
 }
 
-const Welcome: FC<WelcomeProps> = ({metamaskInstalled, lastMintUrl, provider, signature, setSignature, resetSign}) => {
+const Welcome: FC<WelcomeProps> = ({metamaskInstalled, lastMintUrl, provider, signature, setSignature, resetSign, tokenId}) => {
 
 
     return (
@@ -36,7 +37,7 @@ const Welcome: FC<WelcomeProps> = ({metamaskInstalled, lastMintUrl, provider, si
                     }
                     {lastMintUrl && provider &&
                     <LastMint signature={signature} resetSign={resetSign} provider={provider}
-                              url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'}/>
+                              url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} tokenId={tokenId}/>
                     }
                     {lastMintUrl &&
                     <div

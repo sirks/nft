@@ -14,6 +14,7 @@ const Client: FC<BaseProps> = ({provider}) => {
     const [minting, setMinting] = useState<boolean>(false);
     const [err, setErr] = useState<string>("");
     const [lastMintUrl, setLastMint] = useState<string>("");
+    const [tokenId, setTokenId] = useState<string>("");
 
     const {signature, setSignature, resetSign} = useSignature();
 
@@ -34,7 +35,7 @@ const Client: FC<BaseProps> = ({provider}) => {
 
     return (
         <div className="bg-white text-black text-4xl container px-4">
-            <Welcome setSignature={setSignature} signature={signature} resetSign={resetSign} provider={provider} lastMintUrl={lastMintUrl} />
+            <Welcome setSignature={setSignature} signature={signature} resetSign={resetSign} provider={provider} lastMintUrl={lastMintUrl} tokenId={tokenId} />
             {path && isLoggedIn &&
                 <Mint
                     minting={minting}
@@ -45,11 +46,12 @@ const Client: FC<BaseProps> = ({provider}) => {
                     setLastMint={setLastMint}
                     path={path}
                     provider={provider}
-                    address={address}/>
+                    address={address}
+                    setTokenId={setTokenId}
+                />
             }
             {!address && <UnlockAccount provider={provider}/>}
             <Info />
-            {/*{address && <MyNfts provider={provider} address={address}/>}*/}
         </div>
     );
 }
