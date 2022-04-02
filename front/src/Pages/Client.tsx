@@ -4,7 +4,7 @@ import Mint from "../Components/Mint";
 import Welcome from "../Components/Welcome";
 import UnlockAccount from "../Components/UnlockAccount";
 import Info from "../Components/Info";
-import {useParams} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 import {useSignature} from "../useSignature";
 
 
@@ -29,12 +29,13 @@ const Client: FC<BaseProps> = ({provider}) => {
         setAddress(accounts[0]);
     });
 
-    const {mintId: path} = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const path = searchParams.get("code");
 
     const isLoggedIn = !!address;
 
     return (
-        <div className="bg-white text-black text-4xl container px-4">
+        <div className="text-black text-4xl container px-4">
             <Welcome setSignature={setSignature} signature={signature} resetSign={resetSign} provider={provider} lastMintUrl={lastMintUrl} tokenId={tokenId} />
             {path && isLoggedIn &&
                 <Mint

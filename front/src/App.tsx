@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Admin from "./Pages/Admin";
 import Client from "./Pages/Client";
 import {ethers} from "ethers";
@@ -20,7 +20,7 @@ const App = () => {
     if (!window.ethereum) {
         const redirectUrl = "https://metamask.app.link/dapp/" + window.location.host + window.location.pathname;
         return (
-            <div className="bg-white text-black text-4xl container px-4">
+            <div className="text-black text-4xl container px-4 ">
                 <Welcome tokenId={''} signature={''} setSignature={() => {}} resetSign={() => {}} provider={null} lastMintUrl={''}/>
                 <InstallMetamask url={redirectUrl} />
                 <Info />
@@ -34,8 +34,8 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route path='/admin' element={<Admin provider={provider}/>}/>
-                <Route path='*' element={<Client provider={provider}/>}/>
-                <Route path='/:mintId' element={<Client provider={provider}/>}/>
+                <Route path='/' element={<Client provider={provider}/>}/>
+                <Route path="*" element={<Navigate to="/"/>} />
             </Routes>
         </BrowserRouter>
     );
