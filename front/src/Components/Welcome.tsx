@@ -21,11 +21,11 @@ const Welcome: FC<WelcomeProps> = ({metamaskInstalled, lastMintUrl, provider, si
         <section className="text-black body-font">
             <div className="pt-5 lg:pt-12">
                 <div className="text-center">
-                    <h1 className="sm:text-6xl text-3xl font-helveticaBlack title-font font-black">
-                        {lastMintUrl ? 'YOUR TECHCHILL NFT' : 'MINT YOUR TECHCHILL NFT'}
-                    </h1>
-                    <p className="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-black title-font font-medium mt-6">Here
-                        you can mint NFT ticket. After that generate QR code from it.</p>
+                    {/*<h1 className="sm:text-6xl text-3xl font-helveticaBlack title-font font-black">*/}
+                    {/*    {lastMintUrl ? 'YOUR TECHCHILL NFT' : 'MINT YOUR TECHCHILL NFT'}*/}
+                    {/*</h1>*/}
+                    {/*<p className="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-black title-font font-medium mt-6">Here*/}
+                    {/*    you can mint NFT ticket. After that generate QR code from it.</p>*/}
                     {!lastMintUrl &&
                     <img
                         title="Techchill arts gif"
