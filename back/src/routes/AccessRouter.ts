@@ -108,25 +108,46 @@ router.get('/entrance', async (req: express.Request, res: express.Response) => {
     }
 })
 
-router.get('/is-minted', mintMiddleware, async (req, res) => {
-    try {
-        const isMinted: BaseRestResp = {data: false};
-        const client = res.locals.client;
-        if ((client.address && !client.processing) || client.transactionHash) {
-            isMinted.data = true;
-        }
-        res.send(isMinted);
-    } catch (e) {
-        const err: BaseRestResp = {err: {msg: "Something went wrong", code: ERR.INCORRECT_DATA}}
-        res.status(400).send(err);
-        return;
-    }
-});
+// router.get('/is-minted', mintMiddleware, async (req, res) => {
+//     try {
+//         const isMinted: BaseRestResp = {data: false};
+//         const client = res.locals.client;
+//         if ((client.address && !client.processing) || client.transactionHash) {
+//             isMinted.data = true;
+//         }
+//         res.send(isMinted);
+//     } catch (e) {
+//         const err: BaseRestResp = {err: {msg: "Something went wrong", code: ERR.INCORRECT_DATA}}
+//         res.status(400).send(err);
+//         return;
+//     }
+// });
 
-router.get('/get-minted', mintMiddleware, async (req: express.Request, res: express.Response) => {
+router.get('/get-minted', async (req: express.Request, res: express.Response) => {
     try {
-        const client = res.locals.client;
+        if (
+            typeof req.query.event !== 'string'
+            || typeof req.query.token !== 'string') {
+            const err: BaseRestResp = {err: {msg: "pass event, token in query params", code: ERR.INCORRECT_DATA}};
+            res.status(400).send(err);
+            return;
+        }
+        const client = await dao.findToken(req.query.event, req.query.token);
+        if (!client) {
+            const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.NO_SUCH_TOKEN}}
+            res.status(404).send(err);
+            return;
+        }
+
         const ok: BaseRestResp = {data: {}};
+
+        // isnt minted
+        if (!(client.address && !client.processing) || !client.transactionHash) {
+            ok.data = false;
+            res.send(ok);
+            return;
+        }
+
         if (client.img && client.tokenId) {
             ok.data.img = client.img;
             ok.data.tokenId = client.tokenId;
@@ -140,12 +161,16 @@ router.get('/get-minted', mintMiddleware, async (req: express.Request, res: expr
             if (typeof tokenId === "number") {
                 console.log(tokenId);
                 client.tokenId = tokenId;
-                const tokenUrl = await tokenURI(tokenId.toString());
-                const metadataJson: AxiosResponse<Metadata> = await axios.get<Metadata>(ipfs2https(tokenUrl));
-                if (metadataJson.status === 200 && metadataJson.data.image) {
-                    const img = metadataJson.data.image;
-                    client.img = img;
-                    ok.data.img = img;
+                if (!client.img) {
+                    const tokenUrl = await tokenURI(tokenId.toString());
+                    const metadataJson: AxiosResponse<Metadata> = await axios.get<Metadata>(ipfs2https(tokenUrl));
+                    if (metadataJson.status === 200 && metadataJson.data.image) {
+                        const img = metadataJson.data.image;
+                        client.img = img;
+                        ok.data.img = img;
+                    }
+                } else {
+                    ok.data.img = client.img;
                 }
                 await dao.update(client);
             } else {
@@ -166,6 +191,6 @@ router.get('/get-minted', mintMiddleware, async (req: express.Request, res: expr
         res.status(400).send(err);
         return;
     }
-})
+});
 
 export default router;
