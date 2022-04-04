@@ -37,21 +37,24 @@ const Mint: FC<MintProps> = ({
                 const mintResult = await getMinted(MINT_EVENT, path);
                 console.log(mintResult);
                 if (mintResult.data === false) {
-                    console.log('is not minted');
+                    setMinting(false);
+                    return;
+                }
+                if (mintResult.err && mintResult.err.code === ERR.NO_SUCH_TOKEN) {
                     setMinting(false);
                     return;
                 }
                 if (mintResult.data) {
                     setIsMinted(true);
-                    const mintResult = await getMinted(MINT_EVENT, path);
-                    if (mintResult.err) {
-                        // setErr('Cant generate ticket');
-                        // setMinting(false);
-                        return;
-                    }
+                    // const mintResult = await getMinted(MINT_EVENT, path);
+                    // if (mintResult.err) {
+                    //     setErr('Cant generate ticket');
+                    //     setMinting(false);
+                    //     return;
+                    // }
                     setErr('');
                     setMinting(false);
-                    console.log(mintResult.data);
+                    // console.log(mintResult.data);
                     setLastMint(mintResult.data.img);
                     setTokenId(mintResult.data.tokenId);
                 }
