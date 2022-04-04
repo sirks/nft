@@ -1,7 +1,7 @@
 import React from 'react';
 import InfoCard from "./InfoCard";
-import {MdLink, MdQrCodeScanner} from "react-icons/md";
-import {FaTicketAlt, FaLink, FaQrcode} from "react-icons/fa";
+import { MdQrCodeScanner} from "react-icons/md";
+import {FaTicketAlt, FaLink, FaQrcode, FaWallet} from "react-icons/fa";
 
 const Info = () => {
     return (
@@ -13,25 +13,31 @@ const Info = () => {
             <div className="flex justify-center flex-wrap mt-6 md:space-y-0 space-y-6">
                 <InfoCard
                     title={'Link'}
-                    description={'Get your secret NFT link. You received it on email after purchased ticket.'}
+                    description={'Get your secret NFT link'}
                 >
                     <FaLink />
                 </InfoCard>
                 <InfoCard
+                    title={'Wallet'}
+                    description={'Connect your metamask wallet'}
+                >
+                    <FaWallet />
+                </InfoCard>
+                <InfoCard
                     title={'Ticket'}
-                    description={'After that you can mint your Techchill ticket and get NFT.'}
+                    description={'Mint your Techchill 2022 NFT ticket'}
                 >
                     <FaTicketAlt />
                 </InfoCard>
                 <InfoCard
                     title={'QR'}
-                    description={'Now it\'s time to generate QR code from your minted NFT.'}
+                    description={'Generate QR code from your NFT'}
                 >
                     <FaQrcode />
                 </InfoCard>
                 <InfoCard
                     title={'Show'}
-                    description={'Show generated QR code at entrance.'}
+                    description={'Show your QR code at entrance'}
                 >
                     <MdQrCodeScanner />
                 </InfoCard>
