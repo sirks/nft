@@ -76,23 +76,33 @@ router.get('/entrance', async (req: express.Request, res: express.Response) => {
     try {
         if (
             typeof req.query.event !== 'string'
-            || typeof req.query.token !== 'string') {
-            const err: BaseRestResp = {err: {msg: "pass event, token in query params", code: ERR.INCORRECT_DATA}}
+            || typeof req.query.token !== 'string'
+            || typeof req.query.entrance !== 'string'
+        ) {
+            const err: BaseRestResp = {err: {msg: "pass event, token, entrance in query params", code: ERR.INCORRECT_DATA}}
             res.status(400).send(err);
             return;
         }
+
         const event = req.query.event;
-        const token = await dao.findToken('', req.query.token);
+        const entrance = req.query.entrance;
+        const token = await dao.findToken(event, req.query.token);
+        if (!token) {
+            const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.NO_SUCH_TOKEN}};
+            res.status(404).send(err);
+            return;
+        }
+
         if (token && token.address && token.transactionHash) {
             if (token.entrances) {
-                if (token.entrances.includes(event.toLowerCase())) {
+                if (token.entrances.includes(entrance.toLowerCase())) {
                     const err: BaseRestResp = {err: {msg: "token already scanned", code: ERR.TOKEN_SCANNED}};
                     res.status(404).send(err);
                     return;
                 }
-                token.entrances.push(event);
+                token.entrances.push(entrance);
             } else {
-                token.entrances = [event];
+                token.entrances = [entrance];
             }
             await dao.update(token);
             const ok: BaseRestResp = {data: {code: OK.NEW_VISIT}};
@@ -142,7 +152,7 @@ router.get('/get-minted', async (req: express.Request, res: express.Response) =>
         const ok: BaseRestResp = {data: {}};
 
         // isnt minted
-        if (!(client.address && !client.processing) || !client.transactionHash) {
+        if (!((client.address && !client.processing) || client.transactionHash)) {
             ok.data = false;
             res.send(ok);
             return;

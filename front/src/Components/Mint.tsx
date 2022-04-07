@@ -1,66 +1,68 @@
 import React, {FC, useEffect, useState} from "react";
 import {getMinted, mint} from "../utils";
 import {MINT_EVENT} from "../environment";
-import {BaseProps, ERR} from "../Types/types";
+import {BaseProps, ERR, MintState} from "../Types/types";
 import MintInput from "./MintInput";
 import Alert from "./Alert";
+import InstallMetamask from "./InstallMetamask";
+import Spinner from "./Spinner";
 
 type MintProps = {
     address: string,
     path: string,
-    minting: boolean,
-    setMinting: (value: boolean | ((prevVar: boolean) => boolean)) => void,
     err: string,
     setErr: (value: string | ((prevVar: string) => string)) => void,
     lastMintUrl: string,
     setLastMint: (value: string | ((prevVar: string) => string)) => void,
     setTokenId: (value: string | ((prevVar: string) => string)) => void,
+    setAddress: (value: string | ((prevVar: string) => string)) => void,
 } & BaseProps
 
 const Mint: FC<MintProps> = ({
                                  address,
                                  path,
-                                 minting,
-                                 setMinting,
                                  err,
                                  setErr,
                                  lastMintUrl,
                                  setLastMint,
                                  setTokenId,
+                                 provider,
+                                 setAddress
 }) => {
-    const [isMinted, setIsMinted] = useState<boolean>(false);
+    const [mintState, setMintState] = useState<MintState>(MintState.IS_NOT_MINTED);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const isMinted = async () => {
             try {
-                setMinting(true);
+                setIsLoading(true);
                 const mintResult = await getMinted(MINT_EVENT, path);
                 console.log(mintResult);
                 if (mintResult.data === false) {
-                    setMinting(false);
+                    setIsLoading(false);
                     return;
                 }
                 if (mintResult.err && mintResult.err.code === ERR.NO_SUCH_TOKEN) {
-                    setMinting(false);
+                    setIsLoading(false);
+                    setMintState(MintState.NO_SUCH_TOKEN);
+                    setErr('Incorrect link');
+                    return;
+                }
+                if (mintResult.err && mintResult.err.code === ERR.INCORRECT_DATA) {
+                    setIsLoading(false);
+                    setMintState(MintState.IS_MINTING);
                     return;
                 }
                 if (mintResult.data) {
-                    setIsMinted(true);
-                    // const mintResult = await getMinted(MINT_EVENT, path);
-                    // if (mintResult.err) {
-                    //     setErr('Cant generate ticket');
-                    //     setMinting(false);
-                    //     return;
-                    // }
+                    setMintState(MintState.IS_MINTED);
                     setErr('');
-                    setMinting(false);
-                    // console.log(mintResult.data);
+                    setIsLoading(false);
                     setLastMint(mintResult.data.img);
                     setTokenId(mintResult.data.tokenId);
                 }
             } catch (e) {
                 setErr('Something went wrong');
-                setMinting(false);
+                setIsLoading(false);
             }
         }
         isMinted().then();
@@ -68,7 +70,7 @@ const Mint: FC<MintProps> = ({
 
     const onMint = async (address: string, hash: string) => {
         try {
-            setMinting(true);
+            setIsLoading(true);
             const mintResult = await mint(MINT_EVENT, hash, address);
             // debugger;
             let msg = "";
@@ -88,29 +90,52 @@ const Mint: FC<MintProps> = ({
                         msg = "Thou shalt not mint";
                 }
                 setErr(msg);
-                setMinting(false);
+                setIsLoading(false);
                 return;
             }
             setErr('');
-            setMinting(false);
+            setIsLoading(false);
             console.log(mintResult.data);
             setLastMint(mintResult.data.img);
         } catch (e) {
             setErr('Something went wrong');
-            setMinting(false);
+            setIsLoading(false);
         }
 
     }
+
+    const reset = () => {
+        setErr('');
+    }
+
+    if (!window.ethereum && mintState === MintState.IS_NOT_MINTED && !isLoading) {
+        const redirectUrl = "https://metamask.app.link/dapp/" + window.location.host + window.location.pathname;
+        return (
+            <div className="mt-6">
+                <InstallMetamask url={redirectUrl} />
+            </div>
+        );
+    }
+
+    if (window.ethereum) {
+        window.ethereum.on('accountsChanged', (accounts: string[]) => {
+            setAddress(accounts[0]);
+        });
+    }
+
+    const showMintInput = !lastMintUrl && !isLoading && (mintState === MintState.IS_NOT_MINTED || mintState === MintState.IS_MINTING);
+
     return (
         <div className="mt-6">
-            {!lastMintUrl && <MintInput minting={minting} address={address} pathParam={path} onMint={onMint} isMinted={isMinted} />}
-
+            {isLoading && <Spinner/>}
+            {showMintInput &&
+                <MintInput provider={provider} isLoading={isLoading} address={address} pathParam={path} onMint={onMint} mintState={mintState}/>
+            }
             {err &&
-                <div className="mt-6">
-                    <Alert color={'red'} title={'Error'} description={err} />
+                <div className="mt-6 flex justify-center">
+                    <Alert color={'red'} title={'Error'} description={err} setState={reset}/>
                 </div>
             }
-
         </div>
     );
 }

@@ -2,7 +2,6 @@ import React, {FC, useEffect, useRef} from 'react';
 import {useOnLoadImages} from "../useOnLoadImages";
 import QRCode from "react-qr-code";
 import Loading from "./Loading";
-import {BaseProps} from "../Types/types";
 import {OPENSEA_ASSETS} from "../environment";
 
 type LastMintProps = {
@@ -11,7 +10,7 @@ type LastMintProps = {
     signature: string,
     resetSign: () => void,
     tokenId: string,
-} & BaseProps;
+};
 
 const LastMint: FC<LastMintProps> = ({ url, name, signature, tokenId }) => {
     const wrapperRef = useRef<HTMLDivElement>(null);

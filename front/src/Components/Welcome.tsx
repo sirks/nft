@@ -2,22 +2,17 @@ import React, {FC} from 'react';
 import {OPENSEA_COLLECTION} from "../environment";
 import LastMint from "./LastMint";
 import {ipfs2https} from "../utils";
-import {ethers} from "ethers";
-import {useSearchParams} from "react-router-dom";
 
 type WelcomeProps = {
-    metamaskInstalled?: boolean,
     lastMintUrl: string,
-    provider: ethers.providers.Web3Provider | null,
     signature: string,
     setSignature: (value: string | ((prevVar: string) => string)) => void,
     resetSign: () => void,
     tokenId: string,
+    path: string,
 }
 
-const Welcome: FC<WelcomeProps> = ({metamaskInstalled, lastMintUrl, provider, signature, setSignature, resetSign, tokenId}) => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const path = searchParams.get("code");
+const Welcome: FC<WelcomeProps> = ({ lastMintUrl, signature, setSignature, resetSign, tokenId, path}) => {
 
     return (
         <section className="text-black body-font">
@@ -37,8 +32,8 @@ const Welcome: FC<WelcomeProps> = ({metamaskInstalled, lastMintUrl, provider, si
                         onClick={e => window.open(OPENSEA_COLLECTION, "_blank")}
                     />
                     }
-                    {lastMintUrl && provider &&
-                    <LastMint signature={signature} resetSign={resetSign} provider={provider}
+                    {lastMintUrl &&
+                    <LastMint signature={signature} resetSign={resetSign}
                               url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} tokenId={tokenId}/>
                     }
                     {lastMintUrl &&
@@ -46,7 +41,7 @@ const Welcome: FC<WelcomeProps> = ({metamaskInstalled, lastMintUrl, provider, si
                         className="pb-4 mt-6 flex md:flex-nowrap flex-wrap justify-center items-end md:justify-start flex-col md:flex-row">
                         <button
                             className="flex mx-auto text-white bg-orange border-0 w-full w-auto justify-center py-4 px-14 focus:outline-none hover:text-black text-2xl sm:text-3xl font-black uppercase"
-                            onClick={e => signature ? resetSign() : setSignature(path || '')}
+                            onClick={e => signature ? resetSign() : setSignature(path)}
                         >{signature ? 'Show NFT' : 'Generate QR'}
                         </button>
                     </div>

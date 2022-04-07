@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import { IconContext } from "react-icons";
 
 type InfoCardProps = {
     title: string;

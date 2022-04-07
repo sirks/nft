@@ -72,6 +72,14 @@
     animation-delay: .4s;
 }
 
+.spinner {
+    animation: 1s loadSpinner linear infinite;
+}
+
+@keyframes loadSpinner {
+    to { -webkit-transform: rotate(360deg); }
+}
+
 @keyframes rotate {
     0% {
         transform: translate(-50%, -50%) rotateZ(0deg);
@@ -117,3 +125,9 @@
         box-shadow: .2em -.2em 0 0 currentcolor;
     }
 }
+
+
+
+/*@keyframes rotate {*/
+/*    to { -webkit-transform: rotate(360deg); }*/
+/*}*/

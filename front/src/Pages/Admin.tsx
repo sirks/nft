@@ -1,9 +1,10 @@
-import React, {FC, MouseEvent, useCallback, useRef, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {QrReader} from 'react-qr-reader';
-import {entrance, verifyMessage} from "../utils";
-import {BaseProps, BaseRestResp, ERR, OK} from "../Types/types";
+import {entrance} from "../utils";
+import {BaseRestResp, ERR, OK} from "../Types/types";
 import {OnResultFunction} from "react-qr-reader/src/types/index";
 import Alert from "../Components/Alert";
+import {MINT_EVENT} from "../environment";
 
 export type AdminState = {
     msg: string,
@@ -11,7 +12,7 @@ export type AdminState = {
     stop: boolean,
 }
 
-const Admin: FC<BaseProps> = ({}) => {
+const Admin = () => {
     const [state, setState] = useState<AdminState>({msg: "Reading", success: false, stop: false});
     const eventRef = useRef<HTMLInputElement>(null);
     const stateRef = useRef<AdminState>(state);
@@ -44,7 +45,7 @@ const Admin: FC<BaseProps> = ({}) => {
         //     setState({msg: `Could not verify: ${verifyResp.nok}`, success, stop});
         //     return;
         // }
-        const serverResp: BaseRestResp = await entrance(eventRef?.current!.value, txt);
+        const serverResp: BaseRestResp = await entrance(MINT_EVENT, txt, eventRef?.current!.value);
         let msg = "";
         if (serverResp.err) {
             switch (serverResp.err.code) {
@@ -82,7 +83,7 @@ const Admin: FC<BaseProps> = ({}) => {
         setState({msg, success: true, stop});
     }, [state]);
 
-    const reset = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    const reset = useCallback(() => {
         setState({msg: "Reading", success: false, stop: false});
     }, [state]);
 
@@ -113,9 +114,9 @@ const Admin: FC<BaseProps> = ({}) => {
                     onResult={onRead}
                 />
             </div>
-            <div className="min-w-[300px]">
-                {state.msg && <Alert color={state.success ? 'green' : 'red'} title={state.success ? 'Success' : 'Warning'} description={state.msg} />}
-                {state.success && <Alert color={'green'} title={'Scanned'} description={'This guy can pass'} />}
+            <div className="w-[300px]">
+                {state.msg && <Alert setState={() => setState({msg: "", success: false, stop: false})} color={state.success ? 'green' : 'red'} title={state.success ? 'Success' : 'Warning'} description={state.msg} />}
+                {/*{state.success && <Alert color={'green'} title={'Scanned'} description={'This guy can pass'} />}*/}
             </div>
         </div>
     );

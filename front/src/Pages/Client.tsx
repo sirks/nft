@@ -1,17 +1,15 @@
-import React, {FC, useEffect, useState} from 'react';
-import {BaseProps} from "../Types/types";
+import React, {useEffect, useState} from 'react';
 import Mint from "../Components/Mint";
 import Welcome from "../Components/Welcome";
-import UnlockAccount from "../Components/UnlockAccount";
 import Info from "../Components/Info";
 import {useSearchParams} from "react-router-dom";
 import {useSignature} from "../useSignature";
+import {ethers} from "ethers";
 
 
-const Client: FC<BaseProps> = ({provider}) => {
+const Client = () => {
     const [address, setAddress] = useState<string>("");
 
-    const [minting, setMinting] = useState<boolean>(false);
     const [err, setErr] = useState<string>("");
     const [lastMintUrl, setLastMint] = useState<string>("");
     const [tokenId, setTokenId] = useState<string>("");
@@ -25,22 +23,33 @@ const Client: FC<BaseProps> = ({provider}) => {
         initAccount();
     }, []);
 
-    window.ethereum.on('accountsChanged', (accounts: string[]) => {
-        setAddress(accounts[0]);
-    });
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const path = searchParams.get("code");
 
-    const isLoggedIn = !!address;
+    // if (!window.ethereum) {
+    //     const redirectUrl = "https://metamask.app.link/dapp/" + window.location.host + window.location.pathname;
+    //     return (
+    //         <div className="text-black text-4xl container px-4 ">
+    //             <Welcome tokenId={''} signature={''} setSignature={() => {}} resetSign={() => {}} provider={null} lastMintUrl={''}/>
+    //             <InstallMetamask url={redirectUrl} />
+    //             <Info />
+    //         </div>
+    //     );
+    // }
+    //
+    // window.ethereum.on('accountsChanged', (accounts: string[]) => {
+    //     setAddress(accounts[0]);
+    // });
+    //
+    const provider = window.ethereum && new ethers.providers.Web3Provider(window.ethereum);
+
+    const path = searchParams.get("code");
 
     return (
         <div className="text-black text-4xl container px-4">
-            <Welcome setSignature={setSignature} signature={signature} resetSign={resetSign} provider={provider} lastMintUrl={lastMintUrl} tokenId={tokenId} />
-            {path && isLoggedIn &&
+            <Welcome setSignature={setSignature} signature={signature} resetSign={resetSign} lastMintUrl={lastMintUrl} tokenId={tokenId} path={path || ''} />
+            {path &&
                 <Mint
-                    minting={minting}
-                    setMinting={setMinting}
                     err={err}
                     setErr={setErr}
                     lastMintUrl={lastMintUrl}
@@ -48,10 +57,10 @@ const Client: FC<BaseProps> = ({provider}) => {
                     path={path}
                     provider={provider}
                     address={address}
+                    setAddress={setAddress}
                     setTokenId={setTokenId}
                 />
             }
-            {!address && <UnlockAccount provider={provider}/>}
             <Info />
         </div>
     );
