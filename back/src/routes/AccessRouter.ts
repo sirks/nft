@@ -85,7 +85,7 @@ router.get('/entrance', async (req: express.Request, res: express.Response) => {
         }
 
         const event = req.query.event;
-        const entrance = req.query.entrance;
+        const entrance = req.query.entrance.toLowerCase();
         const token = await dao.findToken(event, req.query.token);
         if (!token) {
             const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.NO_SUCH_TOKEN}};
@@ -95,7 +95,7 @@ router.get('/entrance', async (req: express.Request, res: express.Response) => {
 
         if (token && token.address && token.transactionHash) {
             if (token.entrances) {
-                if (token.entrances.includes(entrance.toLowerCase())) {
+                if (token.entrances.includes(entrance)) {
                     const err: BaseRestResp = {err: {msg: "token already scanned", code: ERR.TOKEN_SCANNED}};
                     res.status(404).send(err);
                     return;
