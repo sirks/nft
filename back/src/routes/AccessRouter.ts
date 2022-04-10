@@ -171,6 +171,7 @@ router.get('/get-minted', async (req: express.Request, res: express.Response) =>
             if (typeof tokenId === "number") {
                 console.log(tokenId);
                 client.tokenId = tokenId;
+                ok.data.tokenId = tokenId;
                 if (!client.img) {
                     const tokenUrl = await tokenURI(tokenId.toString());
                     const metadataJson: AxiosResponse<Metadata> = await axios.get<Metadata>(ipfs2https(tokenUrl));
