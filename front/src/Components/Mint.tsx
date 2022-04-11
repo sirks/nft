@@ -109,7 +109,7 @@ const Mint: FC<MintProps> = ({
     }
 
     if (!window.ethereum && mintState === MintState.IS_NOT_MINTED && !isLoading) {
-        const redirectUrl = "https://metamask.app.link/dapp/" + window.location.host + window.location.pathname;
+        const redirectUrl = "https://metamask.app.link/dapp/" + window.location.host + '/?code=' + path;
         return (
             <div className="mt-6">
                 <InstallMetamask url={redirectUrl} />
