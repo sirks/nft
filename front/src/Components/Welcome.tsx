@@ -16,7 +16,7 @@ const Welcome: FC<WelcomeProps> = ({ lastMintUrl, signature, setSignature, reset
 
     return (
         <section className="text-black body-font">
-            <div className="pt-5 lg:pt-12">
+            <div className="pt-5">
                 <div className="text-center">
                     {/*<h1 className="sm:text-6xl text-3xl font-helveticaBlack title-font font-black">*/}
                     {/*    {lastMintUrl ? 'YOUR TECHCHILL NFT' : 'MINT YOUR TECHCHILL NFT'}*/}

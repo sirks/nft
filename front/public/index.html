@@ -20,4 +20,17 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
+  <script type="text/javascript">
+      // for iframe interaction
+      let bodyHeight = 0;
+      const resizeObserver = new ResizeObserver(entries => {
+          const nextHeight = entries[0].target.clientHeight;
+              if (bodyHeight !== nextHeight) {
+                  bodyHeight = nextHeight
+                  window.top.postMessage(['nftIframeHeight', bodyHeight], '*');
+              }
+          }
+      )
+      resizeObserver.observe(document.body);
+  </script>
 </html>
