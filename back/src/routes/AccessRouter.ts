@@ -7,6 +7,9 @@ import {isAddress} from "ethers/lib/utils";
 import axios, {AxiosResponse} from "axios";
 import {checkTicket} from "../techchill/techchill";
 
+const router = express.Router();
+const dao = new Access();
+
 async function mintMiddleware(req: express.Request, res: express.Response, next) {
     if (
         typeof req.query.event !== 'string'
@@ -21,7 +24,7 @@ async function mintMiddleware(req: express.Request, res: express.Response, next)
         res.status(400).send(err);
         return;
     }
-    const client = await dao.findToken(req.query.event, req.query.token);
+    const client = await dao.findEventToken(req.query.event, req.query.token);
     if (!client) {
         const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.TOKEN_NOT_EXIST}}
         res.status(404).send(err);
@@ -32,9 +35,6 @@ async function mintMiddleware(req: express.Request, res: express.Response, next)
     res.locals.address = req.query.address;
     next();
 }
-
-const router = express.Router();
-const dao = new Access();
 
 router.get('/mint', mintMiddleware, async (req: express.Request, res: express.Response) => {
     const client = res.locals.client;
@@ -80,14 +80,19 @@ router.get('/entrance', async (req: express.Request, res: express.Response) => {
             || typeof req.query.token !== 'string'
             || typeof req.query.entrance !== 'string'
         ) {
-            const err: BaseRestResp = {err: {msg: "pass event, token, entrance in query params", code: ERR.INCORRECT_DATA}}
+            const err: BaseRestResp = {
+                err: {
+                    msg: "pass event, token, entrance in query params",
+                    code: ERR.INCORRECT_DATA
+                }
+            }
             res.status(400).send(err);
             return;
         }
 
         const event = req.query.event;
         const entrance = req.query.entrance.toLowerCase();
-        const token = await dao.findToken(event, req.query.token);
+        const token = await dao.findEventToken(event, req.query.token);
         if (!token) {
             const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.TOKEN_NOT_EXIST}};
             res.status(404).send(err);
@@ -143,7 +148,7 @@ router.get('/get-minted', async (req: express.Request, res: express.Response) =>
             res.status(400).send(err);
             return;
         }
-        const client = await dao.findToken(req.query.event, req.query.token);
+        const client = await dao.findEventToken(req.query.event, req.query.token);
         if (!client) {
             const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.TOKEN_NOT_EXIST}}
             res.status(404).send(err);
@@ -206,17 +211,16 @@ router.get('/get-minted', async (req: express.Request, res: express.Response) =>
 });
 
 router.get('/check-ticket', async (req: express.Request, res: express.Response) => {
-    if (typeof req.query.code !== 'string'){
+    if (typeof req.query.code !== 'string') {
         const err: BaseRestResp = {err: {msg: "pass ticketId in query params", code: ERR.INCORRECT_DATA}};
         res.status(400).send(err);
         return;
     }
     const ticketExists = await checkTicket(req.query.code);
-    if(ticketExists){
+    if (ticketExists) {
         const ok: BaseRestResp = {data: {code: OK.TICKET_EXISTS}};
         res.send(ok);
-    }
-    else{
+    } else {
         const err: BaseRestResp = {err: {msg: "ticket not exist", code: ERR.TICKET_NOT_EXIST}};
         res.send(err);
     }
