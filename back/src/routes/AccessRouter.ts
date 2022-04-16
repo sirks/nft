@@ -5,7 +5,7 @@ import {dummyStore, ipfs2https} from "../ipfs/ipfsUtils";
 import {mint, tokenIdBy, tokenURI} from "../contractUtils/contractUtils";
 import {isAddress} from "ethers/lib/utils";
 import axios, {AxiosResponse} from "axios";
-import {check} from "../techchill/techchill";
+import {checkTicket} from "../techchill/techchill";
 
 async function mintMiddleware(req: express.Request, res: express.Response, next) {
     if (
@@ -205,13 +205,13 @@ router.get('/get-minted', async (req: express.Request, res: express.Response) =>
     }
 });
 
-router.get('/check', async (req: express.Request, res: express.Response) => {
-    if (typeof req.query.ticketId !== 'string'){
+router.get('/check-ticket', async (req: express.Request, res: express.Response) => {
+    if (typeof req.query.code !== 'string'){
         const err: BaseRestResp = {err: {msg: "pass ticketId in query params", code: ERR.INCORRECT_DATA}};
         res.status(400).send(err);
         return;
     }
-    const ticketExists = await check(req.query.ticketId);
+    const ticketExists = await checkTicket(req.query.code);
     if(ticketExists){
         const ok: BaseRestResp = {data: {code: OK.TICKET_EXISTS}};
         res.send(ok);
