@@ -10,8 +10,8 @@ const codesDao = new Codes();
 const eventsDao = new Events();
 const accessDao = new Access();
 
-router.get('/register', async (req, res) => {
-    if (req.query.code || req.query.ticket) {
+router.get('/register', async (req: express.Request, res: express.Response) => {
+    if (typeof req.query.code !== 'string' || typeof req.query.ticket !== 'string') {
         const err: BaseRestResp = {err: {msg: "pass code, ticket in query param", code: ERR.INCORRECT_DATA}};
         res.status(400).send(err);
         return;
@@ -22,7 +22,7 @@ router.get('/register', async (req, res) => {
         res.status(400).send(err);
         return;
     }
-    const code = await codesDao.findCode(req.params.code)
+    const code = await codesDao.findCode(req.query.code)
     if (!code) {
         const err: BaseRestResp = {err: {msg: "incorrect code", code: ERR.CODE_NOT_EXIST}};
         res.status(400).send(err);
