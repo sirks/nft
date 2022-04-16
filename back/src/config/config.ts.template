@@ -10,3 +10,6 @@ export const CONTRACT = "0x0000";
 export const PRIVATE_KEY = "qwertyuiop";
 
 export const NFT_STORAGE_KEY = "zxcvbnm";
+
+export const TECHCHILL_API_HOST = "https://fienta.com/api/v1"
+export const TECHCHILL_API_KEY = "qazwsxedc";

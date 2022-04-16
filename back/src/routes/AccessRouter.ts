@@ -5,6 +5,7 @@ import {dummyStore, ipfs2https} from "../ipfs/ipfsUtils";
 import {mint, tokenIdBy, tokenURI} from "../contractUtils/contractUtils";
 import {isAddress} from "ethers/lib/utils";
 import axios, {AxiosResponse} from "axios";
+import {check} from "../techchill/techchill";
 
 async function mintMiddleware(req: express.Request, res: express.Response, next) {
     if (
@@ -22,7 +23,7 @@ async function mintMiddleware(req: express.Request, res: express.Response, next)
     }
     const client = await dao.findToken(req.query.event, req.query.token);
     if (!client) {
-        const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.NO_SUCH_TOKEN}}
+        const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.TOKEN_NOT_EXIST}}
         res.status(404).send(err);
         return;
     }
@@ -88,7 +89,7 @@ router.get('/entrance', async (req: express.Request, res: express.Response) => {
         const entrance = req.query.entrance.toLowerCase();
         const token = await dao.findToken(event, req.query.token);
         if (!token) {
-            const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.NO_SUCH_TOKEN}};
+            const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.TOKEN_NOT_EXIST}};
             res.status(404).send(err);
             return;
         }
@@ -144,7 +145,7 @@ router.get('/get-minted', async (req: express.Request, res: express.Response) =>
         }
         const client = await dao.findToken(req.query.event, req.query.token);
         if (!client) {
-            const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.NO_SUCH_TOKEN}}
+            const err: BaseRestResp = {err: {msg: "No such event/token", code: ERR.TOKEN_NOT_EXIST}}
             res.status(404).send(err);
             return;
         }
@@ -201,6 +202,23 @@ router.get('/get-minted', async (req: express.Request, res: express.Response) =>
         const err: BaseRestResp = {err: {msg: "Something went wrong", code: ERR.INCORRECT_DATA}};
         res.status(400).send(err);
         return;
+    }
+});
+
+router.get('/check', async (req: express.Request, res: express.Response) => {
+    if (typeof req.query.ticketId !== 'string'){
+        const err: BaseRestResp = {err: {msg: "pass ticketId in query params", code: ERR.INCORRECT_DATA}};
+        res.status(400).send(err);
+        return;
+    }
+    const ticketExists = await check(req.query.ticketId);
+    if(ticketExists){
+        const ok: BaseRestResp = {data: {code: OK.TICKET_EXISTS}};
+        res.send(ok);
+    }
+    else{
+        const err: BaseRestResp = {err: {msg: "ticket not exist", code: ERR.TICKET_NOT_EXIST}};
+        res.send(err);
     }
 });
 
