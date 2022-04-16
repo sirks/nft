@@ -66,6 +66,11 @@ export async function entrance(event: string, token: string, entrance: string): 
         .then(r=>r.json());
 }
 
+export async function checkTicket(code: string): Promise<BaseRestResp> {
+    return await fetch(`${ACCESS_BASE_URL}/check-ticket?code=${code}`)
+        .then(r=>r.json());
+}
+
 export const onImageDownload = (id: string) => {
     const svg = document.getElementById(id!);
     const svgData = new XMLSerializer().serializeToString(svg!);

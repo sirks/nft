@@ -11,16 +11,22 @@ export type BaseProps = {
 
 export enum ERR {
     INCORRECT_DATA = -1,
-    NO_SUCH_TOKEN = -2,
+    TOKEN_NOT_EXIST = -2,
     TOKEN_USED = -3,
     TOKEN_STOLEN = -4,
     TOKEN_NOT_MINTED = -5,
     TOKEN_SCANNED = -6,
+    TICKET_NOT_EXIST = -7,
+    CODE_NOT_EXIST = -8,
+    CODE_USED = -9,
 }
 
 export enum OK {
     NEW_VISIT = 1,
-    RETURNING_VISIT = 2
+    RETURNING_VISIT = 2,
+    TICKET_EXISTS = 3,
+    EVENT_ALREADY_REGISTERED = 4,
+    EVENT_REGISTERED = 5,
 }
 
 type HttpOk = { data: any }

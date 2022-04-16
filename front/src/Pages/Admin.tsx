@@ -29,22 +29,10 @@ const Admin = () => {
     const onQr = useCallback(async (txt: string) => {
         const stop = true;
         const success = false;
-        // console.log('event name', eventRef?.current!.value);
-        // const content = txt.split("|");
         if (!eventRef?.current?.value) {
             setState({msg: 'Type event name', success, stop});
             return;
         }
-        // if (txt.length !== 2) {
-        //     setState({msg: `Incorrect qr code: ${txt}`, success, stop});
-        //     return;
-        // }
-        // const [tokenId, signature] = content;
-        // const verifyResp = verifyMessage(tokenId, signature)
-        // if (verifyResp.nok) {
-        //     setState({msg: `Could not verify: ${verifyResp.nok}`, success, stop});
-        //     return;
-        // }
         const serverResp: BaseRestResp = await entrance(MINT_EVENT, txt, eventRef?.current!.value);
         let msg = "";
         if (serverResp.err) {
@@ -55,7 +43,7 @@ const Admin = () => {
                 case ERR.TOKEN_USED:
                     msg = "Ticket used";
                     break;
-                case ERR.NO_SUCH_TOKEN:
+                case ERR.TOKEN_NOT_EXIST:
                     msg = "No such ticket";
                     break;
                 case ERR.TOKEN_STOLEN:

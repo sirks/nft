@@ -48,19 +48,17 @@ const Client = () => {
     return (
         <div className="text-black text-4xl container px-4">
             <Welcome setSignature={setSignature} signature={signature} resetSign={resetSign} lastMintUrl={lastMintUrl} tokenId={tokenId} path={path || ''} />
-            {path &&
-                <Mint
-                    err={err}
-                    setErr={setErr}
-                    lastMintUrl={lastMintUrl}
-                    setLastMint={setLastMint}
-                    path={path}
-                    provider={provider}
-                    address={address}
-                    setAddress={setAddress}
-                    setTokenId={setTokenId}
-                />
-            }
+            <Mint
+                err={err}
+                setErr={setErr}
+                lastMintUrl={lastMintUrl}
+                setLastMint={setLastMint}
+                path={path}
+                provider={provider}
+                address={address}
+                setAddress={setAddress}
+                setTokenId={setTokenId}
+            />
             <Info />
         </div>
     );

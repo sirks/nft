@@ -3,9 +3,9 @@ import UnlockAccount from "./UnlockAccount";
 import {BaseProps, MintState} from "../Types/types";
 
 type MintInputProps = {
-    address: string;
-    pathParam: string;
-    onMint: (address: string, hash: string) => Promise<void>;
+    address: string,
+    pathParam: string,
+    onMint: (address: string, hash: string) => Promise<void>,
     isLoading: boolean,
     mintState: MintState
 } & BaseProps

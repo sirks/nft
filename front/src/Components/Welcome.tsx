@@ -36,16 +36,16 @@ const Welcome: FC<WelcomeProps> = ({ lastMintUrl, signature, setSignature, reset
                     <LastMint signature={signature} resetSign={resetSign}
                               url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} tokenId={tokenId}/>
                     }
-                    {lastMintUrl &&
-                    <div
-                        className="pb-4 mt-6 flex md:flex-nowrap flex-wrap justify-center items-end md:justify-start flex-col md:flex-row">
-                        <button
-                            className="flex mx-auto text-white bg-orange border-0 w-full w-auto justify-center py-4 px-14 focus:outline-none hover:text-black text-2xl sm:text-3xl font-black uppercase"
-                            onClick={e => signature ? resetSign() : setSignature(path)}
-                        >{signature ? 'Show NFT' : 'Generate QR'}
-                        </button>
-                    </div>
-                    }
+                    {/*{lastMintUrl &&*/}
+                    {/*    <div*/}
+                    {/*        className="pb-4 mt-6 flex md:flex-nowrap flex-wrap justify-center items-end md:justify-start flex-col md:flex-row">*/}
+                    {/*        <button*/}
+                    {/*            className="flex mx-auto text-white bg-orange border-0 w-full w-auto justify-center py-4 px-14 focus:outline-none hover:text-black text-2xl sm:text-3xl font-black uppercase"*/}
+                    {/*            onClick={e => signature ? resetSign() : setSignature(path)}*/}
+                    {/*        >{signature ? 'Show NFT' : 'Generate QR'}*/}
+                    {/*        </button>*/}
+                    {/*    </div>*/}
+                    {/*}*/}
                 </div>
             </div>
         </section>

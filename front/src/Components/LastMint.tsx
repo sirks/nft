@@ -20,10 +20,10 @@ const LastMint: FC<LastMintProps> = ({ url, name, signature, tokenId }) => {
         loadImages();
     }, []);
 
-    let showQR = false;
-    if (signature) {
-        showQR = true;
-    }
+    // let showQR = false;
+    // if (signature) {
+    //     showQR = true;
+    // }
 
     return (
                 <div ref={wrapperRef} className="flex justify-center">
@@ -32,18 +32,16 @@ const LastMint: FC<LastMintProps> = ({ url, name, signature, tokenId }) => {
                             <Loading />
                         </div>
                     }
-                    {!showQR &&
-                        <img
-                            title={name}
-                            alt={name}
-                            className={`${!imageLoaded ? 'hidden' : ''} ${tokenId ? 'cursor-pointer' : ''} flex-shrink-0 w-[256px] h-[256px] object-cover object-center mx-auto mt-6`}
-                            src={url}
-                            onClick={e => tokenId && window.open(OPENSEA_ASSETS + tokenId, "_blank")}
-                        />
-                    }
-                    {signature && showQR &&
-                        <QRCode className="mt-6" value={signature} level="H" size={256} />
-                    }
+                    <img
+                        title={name}
+                        alt={name}
+                        className={`${!imageLoaded ? 'hidden' : ''} ${tokenId ? 'cursor-pointer' : ''} flex-shrink-0 w-[256px] h-[256px] object-cover object-center mx-auto mt-6`}
+                        src={url}
+                        onClick={e => tokenId && window.open(OPENSEA_ASSETS + tokenId, "_blank")}
+                    />
+                    {/*{signature && showQR &&*/}
+                    {/*    <QRCode className="mt-6" value={signature} level="H" size={256} />*/}
+                    {/*}*/}
                 </div>
     );
 };

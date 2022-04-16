@@ -1,15 +1,16 @@
 import React, {FC, useEffect, useState} from "react";
-import {getMinted, mint} from "../utils";
+import {checkTicket, getMinted, mint} from "../utils";
 import {MINT_EVENT} from "../environment";
-import {BaseProps, ERR, MintState} from "../Types/types";
+import {BaseProps, ERR, MintState, OK} from "../Types/types";
 import MintInput from "./MintInput";
 import Alert from "./Alert";
 import InstallMetamask from "./InstallMetamask";
 import Spinner from "./Spinner";
+import TicketInput from "./TicketInput";
 
 type MintProps = {
     address: string,
-    path: string,
+    path: string | null,
     err: string,
     setErr: (value: string | ((prevVar: string) => string)) => void,
     lastMintUrl: string,
@@ -31,10 +32,14 @@ const Mint: FC<MintProps> = ({
 }) => {
     const [mintState, setMintState] = useState<MintState>(MintState.IS_NOT_MINTED);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [ticketExists, setTicketExists] = useState<boolean>(false);
 
     useEffect(() => {
         const isMinted = async () => {
             try {
+                if (!path) {
+                    return;
+                }
                 setIsLoading(true);
                 const mintResult = await getMinted(MINT_EVENT, path);
                 console.log(mintResult);
@@ -42,7 +47,7 @@ const Mint: FC<MintProps> = ({
                     setIsLoading(false);
                     return;
                 }
-                if (mintResult.err && mintResult.err.code === ERR.NO_SUCH_TOKEN) {
+                if (mintResult.err && mintResult.err.code === ERR.TOKEN_NOT_EXIST) {
                     setIsLoading(false);
                     setMintState(MintState.NO_SUCH_TOKEN);
                     setErr('Incorrect link');
@@ -68,6 +73,44 @@ const Mint: FC<MintProps> = ({
         isMinted().then();
     }, []);
 
+    const onCheck = async (code: string) => {
+        try {
+            if (code === '') {
+                setErr('Ticket ID is not specified');
+                return;
+            }
+            setIsLoading(true);
+            const checkResult = await checkTicket(code);
+            if (checkResult.err) {
+                let msg = "";
+                switch (checkResult.err.code) {
+                    case ERR.INCORRECT_DATA:
+                        msg = "Incorect data";
+                        break;
+                    case ERR.TICKET_NOT_EXIST:
+                        msg = "Ticket not exist";
+                        break;
+                    default:
+                        //unknown error
+                        msg = "Something went wrong";
+                }
+                setErr(msg);
+                setIsLoading(false);
+                setMintState(MintState.NO_SUCH_TOKEN);
+                return;
+            }
+            if (checkResult.data && checkResult.data.code === OK.TICKET_EXISTS) {
+                setErr('');
+                setIsLoading(false);
+                setTicketExists(true);
+                setMintState(MintState.IS_MINTED);
+            }
+        } catch (e) {
+            setErr('Something went wrong');
+            setIsLoading(false);
+        }
+    }
+
     const onMint = async (address: string, hash: string) => {
         try {
             setIsLoading(true);
@@ -82,7 +125,7 @@ const Mint: FC<MintProps> = ({
                     case ERR.TOKEN_USED:
                         msg = "Ticket used";
                         break;
-                    case ERR.NO_SUCH_TOKEN:
+                    case ERR.TOKEN_NOT_EXIST:
                         msg = "No such ticket";
                         break;
                     default:
@@ -128,9 +171,10 @@ const Mint: FC<MintProps> = ({
     return (
         <div className="mt-6">
             {isLoading && <Spinner/>}
-            {showMintInput &&
+            {showMintInput && path &&
                 <MintInput provider={provider} isLoading={isLoading} address={address} pathParam={path} onMint={onMint} mintState={mintState}/>
             }
+            {!ticketExists && !isLoading && <TicketInput provider={provider} isLoading={isLoading} address={address} mintState={mintState} onCheck={onCheck}/>}
             {err &&
                 <div className="mt-6 flex justify-center">
                     <Alert color={'red'} title={'Error'} description={err} setState={reset}/>
