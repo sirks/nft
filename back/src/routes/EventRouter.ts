@@ -36,7 +36,7 @@ router.get('/register', async (req: express.Request, res: express.Response) => {
         return;
     }
     if (access.entrances) {
-        if (access.entrances.includes(event.name)) {
+        if (access.entrances[event.name] !== undefined) {
             const ok: BaseRestResp = {data: {code: OK.EVENT_ALREADY_REGISTERED, event}};
             res.status(200).send(ok);
             return;
@@ -47,11 +47,10 @@ router.get('/register', async (req: express.Request, res: express.Response) => {
         res.status(400).send(err);
         return;
     }
-    if (access.entrances) {
-        access.entrances.push(event.name)
-    } else {
-        access.entrances = [event.name]
+    if (access.entrances === undefined) {
+        access.entrances = {}
     }
+    access.entrances[event.name] = false
     await accessDao.update(access);
     code.used += 1;
     await codesDao.update(code);

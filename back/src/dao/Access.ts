@@ -11,8 +11,8 @@ export default class Access extends Dao<AccessEntity> {
         return await col.findOne({event, token});
     }
 
-    public async findToken(token: string): Promise<AccessEntity | null> {
+    public async findToken(ticketId: string): Promise<AccessEntity | null> {
         const col = await this.getCollection();
-        return await col.findOne({token});
+        return await col.findOne({ticketId});
     }
 }

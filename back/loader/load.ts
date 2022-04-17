@@ -38,4 +38,23 @@ function makeid(length) {
     return result;
 }
 
-load();
+async function updateAll() {
+    try {
+        await client.connect();
+        const db = await client.db();
+        const colection = db.collection(collectionName);
+        const all = await colection.find().toArray();
+        for (const event of all){
+            if(event.token){
+                event.ticketId = event.token;
+            }
+            await colection.updateOne({_id:event._id}, {$set: event}, {upsert: false})
+        }
+        await client.close()
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+// load();
+updateAll();
