@@ -14,3 +14,8 @@ test('can not get tokenId for out of gas transaction', async () => {
     const tokenId = await tokenIdBy('0x2a4f53dbf89514be0512ec5eda4dd0ef21e973c23b0de7fda896988883d4154b');
     expect(tokenId).toBeUndefined()
 });
+
+test('can not get tokenId for out of gas transaction', async () => {
+    const tokenId = await tokenIdBy('0x2a4f53dbf89514be0512ec5eda4dd0ef21e973c23b0de7fda896988883d4154b');
+    expect(tokenId).toBeUndefined()
+});
