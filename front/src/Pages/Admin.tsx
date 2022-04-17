@@ -49,7 +49,7 @@ const Admin = () => {
                     msg = "Token not minted";
                     break;
                 case ERR.TICKET_SCANNED:
-                    msg = "You already scanned";
+                    msg = "Already scanned";
                     break;
                 case ERR.NOT_REGISTERED:
                     msg = "Not registered";
