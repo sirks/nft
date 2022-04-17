@@ -34,7 +34,7 @@ const Welcome: FC<WelcomeProps> = ({ lastMintUrl, signature, setSignature, reset
                     }
                     {lastMintUrl &&
                     <LastMint signature={signature} resetSign={resetSign}
-                              url={ipfs2https(lastMintUrl)} name={'Your NFT is on its way'} tokenId={tokenId}/>
+                              url={ipfs2https(lastMintUrl)} name={'Your NFT'} tokenId={tokenId}/>
                     }
                     {/*{lastMintUrl &&*/}
                     {/*    <div*/}
