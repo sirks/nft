@@ -18,19 +18,19 @@ const Info = () => {
                 </InfoCard>
                 <InfoCard
                     title={'Wallet'}
-                    description={'Connect your metamask wallet'}
+                    description={'Connect metamask wallet'}
                 >
                     <FaWallet />
                 </InfoCard>
                 <InfoCard
                     title={'Ticket'}
-                    description={'Mint your Techchill 2022 NFT ticket'}
+                    description={'Mint Techchill 2022 NFT ticket'}
                 >
                     <FaTicketAlt />
                 </InfoCard>
                 <InfoCard
                     title={'Event'}
-                    description={'Apply to side events'}
+                    description={'Register for side events'}
                 >
                     <FaCalendarDay />
                 </InfoCard>

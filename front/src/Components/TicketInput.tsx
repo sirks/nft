@@ -24,8 +24,8 @@ const TicketInput: FC<TicketInputProps> = ({ isLoading, onCheck, ticketInput, se
                 <input
                     value={ticketInput}
                     onChange={e => setTicketInput(e.target.value)}
-                    type="text"
-                    placeholder="Ticked ID..."
+                    type="password"
+                    placeholder="ticket code..."
                     className="w-full sm:w-auto bg-gray-100 bg-opacity-50 border border-gray-300 focus:ring-2 focus:bg-transparent focus:ring-orange focus:border-orange text-base outline-none text-black py-4 px-5 leading-8 transition-colors duration-200 ease-in-out" />
             </div>
             <button

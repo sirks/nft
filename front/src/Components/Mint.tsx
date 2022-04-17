@@ -84,7 +84,6 @@ const Mint: FC<MintProps> = ({
             }
             setIsLoading(true);
             const checkResult = await checkTicket(code);
-            console.log('checkResult', checkResult);
             if (checkResult.err) {
                 let msg = "";
                 switch (checkResult.err.code) {

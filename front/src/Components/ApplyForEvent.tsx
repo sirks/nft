@@ -5,7 +5,7 @@ import {ERR} from "../Types/types";
 import Event from "./Event";
 
 type EventState = {
-    name: string,
+    display: string,
     location: string,
     time: string
 }
@@ -29,7 +29,6 @@ const ApplyForEvent: FC<ApplyForEventProps> = ({isLoading, ticketId, setIsLoadin
             }
             setIsLoading(true);
             const registerResult = await register(code, ticket);
-            console.log('registerResult', registerResult);
             if (registerResult.err) {
                 let msg = "";
                 switch (registerResult.err.code) {
@@ -56,7 +55,7 @@ const ApplyForEvent: FC<ApplyForEventProps> = ({isLoading, ticketId, setIsLoadin
             }
             setErr('');
             setIsLoading(false);
-            setEvent({name: registerResult.data.event.name, location: registerResult.data.event.location, time: registerResult.data.event.time})
+            setEvent({display: registerResult.data.event.display, location: registerResult.data.event.location, time: registerResult.data.event.time})
         } catch (e) {
             setErr('Something went wrong');
             setIsLoading(false);
@@ -70,8 +69,7 @@ const ApplyForEvent: FC<ApplyForEventProps> = ({isLoading, ticketId, setIsLoadin
     return (
         <div className="pt-4 pb-4 mx-auto">
             <div className="flex flex-col text-center w-full mb-12">
-                <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4">Secret side event</h1>
-                <p className="lg:w-2/3 mx-auto leading-relaxed text-base">Type in event code and apply for afterparty. Dont forget to share the link with your friends.</p>
+                <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4">Type in secret code and apply for afterparty</h1>
             </div>
             <div className="pb-4 flex md:flex-nowrap flex-wrap justify-center items-center flex-col sm:flex-row">
                 <div className="w-full sm:w-auto relative sm:mr-4 mb-3 sm:mb-0">
@@ -94,7 +92,7 @@ const ApplyForEvent: FC<ApplyForEventProps> = ({isLoading, ticketId, setIsLoadin
                     <Alert color={'red'} title={'Error'} description={err} setState={reset}/>
                 </div>
             }
-            {event && <Event name={event.name} location={event.location} time={event.time} />}
+            {event && <Event display={event.display} location={event.location} time={event.time} />}
         </div>
     );
 };
