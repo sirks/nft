@@ -1,7 +1,6 @@
 import React from 'react';
 import InfoCard from "./InfoCard";
-import { MdQrCodeScanner} from "react-icons/md";
-import {FaTicketAlt, FaLink, FaQrcode, FaWallet} from "react-icons/fa";
+import {FaTicketAlt, FaLink, FaWallet, FaCalendarDay} from "react-icons/fa";
 
 const Info = () => {
     return (
@@ -12,8 +11,8 @@ const Info = () => {
             </div>
             <div className="flex justify-center flex-wrap mt-6 md:space-y-0 space-y-6">
                 <InfoCard
-                    title={'Link'}
-                    description={'Get your secret NFT link'}
+                    title={'Code'}
+                    description={'Paste TechChill ticket code'}
                 >
                     <FaLink />
                 </InfoCard>
@@ -30,16 +29,10 @@ const Info = () => {
                     <FaTicketAlt />
                 </InfoCard>
                 <InfoCard
-                    title={'QR'}
-                    description={'Generate QR code from your NFT'}
+                    title={'Event'}
+                    description={'Apply to side events'}
                 >
-                    <FaQrcode />
-                </InfoCard>
-                <InfoCard
-                    title={'Show'}
-                    description={'Show your QR code at entrance'}
-                >
-                    <MdQrCodeScanner />
+                    <FaCalendarDay />
                 </InfoCard>
             </div>
         </div>

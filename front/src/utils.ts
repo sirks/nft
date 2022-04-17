@@ -46,28 +46,35 @@ export async function getOwnerOf(token: string): Promise<string> {
 
 const ACCESS_BASE_URL = `${SERVER}/access`
 
-export async function mint(event: string, hash: string, address: string): Promise<BaseRestResp> {
-    return await fetch(`${ACCESS_BASE_URL}/mint?event=${event}&token=${hash}&address=${address}`)
+export async function mint(token: string, address: string): Promise<BaseRestResp> {
+    return await fetch(`${ACCESS_BASE_URL}/mint?token=${token}&address=${address}`)
         .then(r=>r.json());
 }
 
-export async function getMinted(event: string, hash: string): Promise<BaseRestResp> {
-    return await fetch(`${ACCESS_BASE_URL}/get-minted?event=${event}&token=${hash}`)
+const EVENT_BASE_URL = `${SERVER}/event`
+
+export async function register(code: string, ticket: string): Promise<BaseRestResp> {
+    return await fetch(`${EVENT_BASE_URL}/register?code=${code}&ticket=${ticket}`)
         .then(r=>r.json());
 }
+
+// export async function getMinted(event: string, hash: string): Promise<BaseRestResp> {
+//     return await fetch(`${ACCESS_BASE_URL}/get-minted?event=${event}&token=${hash}`)
+//         .then(r=>r.json());
+// }
 
 // export async function checkIfMinted(event: string, hash: string, address: string): Promise<BaseRestResp> {
 //     return await fetch(`${ACCESS_BASE_URL}/is-minted?event=${event}&token=${hash}&address=${address}`)
 //         .then(r=>r.json());
 // }
 
-export async function entrance(event: string, token: string, entrance: string): Promise<BaseRestResp> {
-    return await fetch(`${ACCESS_BASE_URL}/entrance?event=${event}&token=${token}&entrance=${entrance}`)
+export async function entrance(token: string, entrance: string): Promise<BaseRestResp> {
+    return await fetch(`${ACCESS_BASE_URL}/entrance?token=${token}&entrance=${entrance}`)
         .then(r=>r.json());
 }
 
 export async function checkTicket(code: string): Promise<BaseRestResp> {
-    return await fetch(`${ACCESS_BASE_URL}/check-ticket?code=${code}`)
+    return await fetch(`${ACCESS_BASE_URL}/check-ticket?id=${code}`)
         .then(r=>r.json());
 }
 

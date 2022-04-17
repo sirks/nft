@@ -4,7 +4,6 @@ import {entrance} from "../utils";
 import {BaseRestResp, ERR, OK} from "../Types/types";
 import {OnResultFunction} from "react-qr-reader/src/types/index";
 import Alert from "../Components/Alert";
-import {MINT_EVENT} from "../environment";
 
 export type AdminState = {
     msg: string,
@@ -33,27 +32,27 @@ const Admin = () => {
             setState({msg: 'Type event name', success, stop});
             return;
         }
-        const serverResp: BaseRestResp = await entrance(MINT_EVENT, txt, eventRef?.current!.value);
+        const serverResp: BaseRestResp = await entrance(txt, eventRef?.current!.value);
         let msg = "";
         if (serverResp.err) {
             switch (serverResp.err.code) {
                 case ERR.INCORRECT_DATA:
                     msg = `Could not verify: ${serverResp.err.msg}`;
                     break;
-                case ERR.TOKEN_USED:
+                case ERR.CODE_USED:
                     msg = "Ticket used";
                     break;
-                case ERR.TOKEN_NOT_EXIST:
+                case ERR.TICKET_NOT_EXIST:
                     msg = "No such ticket";
-                    break;
-                case ERR.TOKEN_STOLEN:
-                    msg = "Not your ticket";
                     break;
                 case ERR.TOKEN_NOT_MINTED:
                     msg = "Token not minted";
                     break;
-                case ERR.TOKEN_SCANNED:
+                case ERR.TICKET_SCANNED:
                     msg = "You already scanned";
+                    break;
+                case ERR.NOT_REGISTERED:
+                    msg = "Not registered";
                     break;
                 default:
                     //unknown error
@@ -104,7 +103,6 @@ const Admin = () => {
             </div>
             <div className="w-[300px]">
                 {state.msg && <Alert setState={() => setState({msg: "", success: false, stop: false})} color={state.success ? 'green' : 'red'} title={state.success ? 'Success' : 'Warning'} description={state.msg} />}
-                {/*{state.success && <Alert color={'green'} title={'Scanned'} description={'This guy can pass'} />}*/}
             </div>
         </div>
     );

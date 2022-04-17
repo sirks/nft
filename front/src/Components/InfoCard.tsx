@@ -8,7 +8,7 @@ type InfoCardProps = {
 
 const InfoCard: FC<InfoCardProps> = ({ title, description, children}) => {
     return (
-        <div className="p-5 md:w-1/5 flex flex-col text-center items-center">
+        <div className="p-5 md:w-1/4 flex flex-col text-center items-center">
             <div
                 className="w-20 h-20 inline-flex items-center justify-center rounded-full bg-orange text-black mb-5 flex-shrink-0">
                 {children}
