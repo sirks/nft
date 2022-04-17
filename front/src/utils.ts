@@ -34,20 +34,20 @@ export async function getTokensOf(address: string): Promise<string[]> {
 
 }
 
-export async function getTokenURI(token: string): Promise<string> {
+export async function getTokenURI(ticketid: string): Promise<string> {
 
-    return await fetch(`${CONTRACT_BASE_URL}/token-uri/${token}`).then(r => r.text());
+    return await fetch(`${CONTRACT_BASE_URL}/token-uri/${ticketid}`).then(r => r.text());
 }
 
-export async function getOwnerOf(token: string): Promise<string> {
+export async function getOwnerOf(ticketid: string): Promise<string> {
 
-    return await fetch(`${CONTRACT_BASE_URL}/owner-of/${token}`).then(r => r.text());
+    return await fetch(`${CONTRACT_BASE_URL}/owner-of/${ticketid}`).then(r => r.text());
 }
 
 const ACCESS_BASE_URL = `${SERVER}/access`
 
-export async function mint(token: string, address: string): Promise<BaseRestResp> {
-    return await fetch(`${ACCESS_BASE_URL}/mint?token=${token}&address=${address}`)
+export async function mint(ticketid: string, address: string): Promise<BaseRestResp> {
+    return await fetch(`${ACCESS_BASE_URL}/mint?ticketid=${ticketid}&address=${address}`)
         .then(r=>r.json());
 }
 
@@ -68,8 +68,8 @@ export async function register(code: string, ticket: string): Promise<BaseRestRe
 //         .then(r=>r.json());
 // }
 
-export async function entrance(token: string, entrance: string): Promise<BaseRestResp> {
-    return await fetch(`${ACCESS_BASE_URL}/entrance?token=${token}&entrance=${entrance}`)
+export async function entrance(ticketid: string, entrance: string): Promise<BaseRestResp> {
+    return await fetch(`${ACCESS_BASE_URL}/entrance?ticketid=${ticketid}&entrance=${entrance}`)
         .then(r=>r.json());
 }
 

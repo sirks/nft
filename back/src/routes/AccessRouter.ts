@@ -47,8 +47,8 @@ router.get('/check-ticket', async (req: express.Request, res: express.Response) 
 
 
 async function mintMiddleware(req: express.Request, res: express.Response, next) {
-    if (typeof req.query.token !== 'string' || typeof req.query.address !== 'string') {
-        const err: BaseRestResp = {err: {msg: "pass token, address in query params", code: ERR.INCORRECT_DATA}};
+    if (typeof req.query.ticketid !== 'string' || typeof req.query.address !== 'string') {
+        const err: BaseRestResp = {err: {msg: "pass ticketid, address in query params", code: ERR.INCORRECT_DATA}};
         res.status(400).send(err);
         return;
     }
@@ -57,7 +57,7 @@ async function mintMiddleware(req: express.Request, res: express.Response, next)
         res.status(400).send(err);
         return;
     }
-    const access = await dao.findToken(req.query.token);
+    const access = await dao.findToken(req.query.ticketid);
     if (!access) {
         const err: BaseRestResp = {err: {msg: "No such ticket", code: ERR.TICKET_NOT_EXIST}}
         res.status(404).send(err);
@@ -99,18 +99,18 @@ router.get('/mint', mintMiddleware, async (req: express.Request, res: express.Re
     await dao.update(access);
     const ok: BaseRestResp = {data: {img: ipfsToken.data.image.href}}
     res.send(ok);
-    console.log("mint done", req.query.token, req.query.address, ok);
+    console.log("mint done", req.query.ticketid, req.query.address, ok);
 });
 
 router.get('/entrance', async (req: express.Request, res: express.Response) => {
     try {
-        if (typeof req.query.token !== 'string' || typeof req.query.entrance !== 'string') {
-            const err: BaseRestResp = {err: {msg: "pass entrance, token in query params", code: ERR.INCORRECT_DATA}}
+        if (typeof req.query.ticketid !== 'string' || typeof req.query.entrance !== 'string') {
+            const err: BaseRestResp = {err: {msg: "pass entrance, ticketid in query params", code: ERR.INCORRECT_DATA}}
             res.status(400).send(err);
             return;
         }
 
-        const token = await dao.findToken(req.query.token);
+        const token = await dao.findToken(req.query.ticketid);
         if (!token) {
             const err: BaseRestResp = {err: {msg: "No such token", code: ERR.TICKET_NOT_EXIST}};
             res.status(404).send(err);
