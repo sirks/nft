@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ethvault/iframe-provider": "^0.1.10",
     "@metamask/detect-provider": "^1.2.0",
     "ethers": "^5.5.4",
+    "iframe-provider": "^0.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",

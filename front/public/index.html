@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8"/>
     <link rel="icon" href="%PUBLIC_URL%/logo32x32.png" sizes="32x32"/>
     <link rel="icon" href="%PUBLIC_URL%/logo192x192.png" sizes="192x192"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
     <meta
-      name="description"
-      content="Web site created using create-react-app"
+            name="description"
+            content="Web site created using create-react-app"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo180x180.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo180x180.png"/>
 
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json"/>
 
     <title>NFT - TechChill</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
-  <script type="text/javascript">
-      // for iframe interaction
-      let bodyHeight = 0;
-      const resizeObserver = new ResizeObserver(entries => {
-          const nextHeight = entries[0].target.clientHeight;
-              if (bodyHeight !== nextHeight) {
-                  bodyHeight = nextHeight
-                  window.top.postMessage(['nftIframeHeight', bodyHeight], '*');
-              }
-          }
-      )
-      resizeObserver.observe(document.body);
-  </script>
+</head>
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<div id="root"></div>
+</body>
+<script type="text/javascript">
+    // for iframe interaction
+    let bodyHeight = 0;
+    const resizeObserver = new ResizeObserver(entries => {
+            const nextHeight = entries[0].target.clientHeight;
+            if (bodyHeight !== nextHeight) {
+                bodyHeight = nextHeight
+                window.top.postMessage(['nftIframeHeight', bodyHeight], '*');
+            }
+        }
+    )
+    resizeObserver.observe(document.body);
+</script>
 </html>

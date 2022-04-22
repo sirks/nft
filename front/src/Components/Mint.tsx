@@ -7,11 +7,11 @@ import InstallMetamask from "./InstallMetamask";
 import Spinner from "./Spinner";
 import TicketInput from "./TicketInput";
 import {TicketCtx} from "./Context";
-import ApplyForEvent from "./ApplyForEvent";
+import {useSearchParams} from "react-router-dom";
+
 
 type MintProps = {
     address: string,
-    path: string | null,
     err: string,
     setErr: (value: string | ((prevVar: string) => string)) => void,
     lastMintUrl: string,
@@ -22,7 +22,6 @@ type MintProps = {
 
 const Mint: FC<MintProps> = ({
                                  address,
-                                 path,
                                  err,
                                  setErr,
                                  lastMintUrl,
@@ -31,11 +30,12 @@ const Mint: FC<MintProps> = ({
                                  provider,
                                  setAddress
 }) => {
-    const [mintState, setMintState] = useState<MintState>(MintState.IS_NOT_MINTED);
+    const [mintState, setMintState] = useState<MintState>(MintState.START);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [ticketExists, setTicketExists] = useState<boolean>(false);
     const [ticketInput, setTicketInput] = useState<string>('');
     const {ticketId, setTicketId} = useContext(TicketCtx);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     // useEffect(() => {
     //     const isMinted = async () => {
@@ -171,8 +171,11 @@ const Mint: FC<MintProps> = ({
         setErr('');
     }
 
-    if (!window.ethereum && mintState === MintState.IS_NOT_MINTED && !isLoading) {
-        const redirectUrl = "https://metamask.app.link/dapp/" + window.location.host + '/?code=' + path;
+    if (!provider && mintState === MintState.IS_NOT_MINTED && !isLoading) {
+        // const path = searchParams.get("parent") || window.location.host + window.location.pathname;
+        const path = window.location.host + window.location.pathname;
+        const redirectUrl = "https://metamask.app.link/dapp/" + path;
+        debugger;
         return (
             <div className="mt-6">
                 <InstallMetamask url={redirectUrl} />
@@ -180,8 +183,8 @@ const Mint: FC<MintProps> = ({
         );
     }
 
-    if (window.ethereum) {
-        window.ethereum.on('accountsChanged', (accounts: string[]) => {
+    if (provider) {
+        provider.on('accountsChanged', (accounts: string[]) => {
             setAddress(accounts[0]);
         });
     }
@@ -200,7 +203,7 @@ const Mint: FC<MintProps> = ({
                     <Alert color={'red'} title={'Error'} description={err} setState={reset}/>
                 </div>
             }
-            {ticketId && lastMintUrl && <ApplyForEvent ticketId={ticketId} isLoading={isLoading} setIsLoading={setIsLoading}/>}
+            {/*{ticketId && lastMintUrl && <ApplyForEvent ticketId={ticketId} isLoading={isLoading} setIsLoading={setIsLoading}/>}*/}
         </div>
     );
 }

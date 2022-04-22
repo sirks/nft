@@ -9,24 +9,23 @@ type WelcomeProps = {
     setSignature: (value: string | ((prevVar: string) => string)) => void,
     resetSign: () => void,
     tokenId: string,
-    path: string,
 }
 
-const Welcome: FC<WelcomeProps> = ({ lastMintUrl, signature, setSignature, resetSign, tokenId, path}) => {
+const Welcome: FC<WelcomeProps> = ({ lastMintUrl, signature, setSignature, resetSign, tokenId}) => {
 
     return (
         <section className="text-black body-font">
             <div className="pt-5">
                 <div className="text-center">
-                    {/*<h1 className="sm:text-6xl text-3xl font-helveticaBlack title-font font-black">*/}
-                    {/*    {lastMintUrl ? 'YOUR TECHCHILL NFT' : 'MINT YOUR TECHCHILL NFT'}*/}
-                    {/*</h1>*/}
+                    <h1 className="sm:text-3xl text-xl font-helveticaBlack title-font font-black text-center">
+                        {lastMintUrl ? 'MY TECHCHILL 2022 NFT' : 'MINT MY TECHCHILL 2022 NFT'}
+                    </h1>
                     {/*<p className="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-black title-font font-medium mt-6">Here*/}
                     {/*    you can mint NFT ticket. After that generate QR code from it.</p>*/}
                     {!lastMintUrl &&
                     <img
-                        title="Techchill arts gif"
-                        alt="Techchill arts gif"
+                        title="Techchill 2022 gif"
+                        alt="Techchill 2022 gif"
                         className="flex-shrink-0 w-[256px] h-[256px] object-cover object-center mx-auto mt-6 cursor-pointer"
                         src={'/techchill_nft_gif.gif'}
                         onClick={e => window.open(OPENSEA_COLLECTION, "_blank")}
@@ -34,7 +33,7 @@ const Welcome: FC<WelcomeProps> = ({ lastMintUrl, signature, setSignature, reset
                     }
                     {lastMintUrl &&
                     <LastMint signature={signature} resetSign={resetSign}
-                              url={ipfs2https(lastMintUrl)} name={'Your NFT'} tokenId={tokenId}/>
+                              url={ipfs2https(lastMintUrl)} name={'my techchill 2022 nft'} tokenId={tokenId}/>
                     }
                     {/*{lastMintUrl &&*/}
                     {/*    <div*/}

@@ -14,14 +14,14 @@ const MintInput: FC<MintInputProps> = ({address, onMint, isLoading, provider, mi
     if (!address && mintState === MintState.IS_NOT_MINTED) {
         return (
             <>
-                {window.ethereum && <UnlockAccount provider={provider}/>}
+                {provider && <UnlockAccount provider={provider}/>}
             </>
         )
     }
 
     const stateForBtn = mintState === MintState.IS_MINTING;
 
-    const text = mintState === MintState.IS_MINTING ? 'Minting...' : 'Mint your NFT';
+    const text = mintState === MintState.IS_MINTING ? 'Minting...' : 'Mint My NFT';
 
     return (
         <div className="pb-4 flex md:flex-nowrap flex-wrap justify-center items-end md:justify-start flex-col md:flex-row">

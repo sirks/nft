@@ -10,29 +10,14 @@ const Info = () => {
                 <div className="w-16 h-1 bg-orange inline-flex"/>
             </div>
             <div className="flex justify-center flex-wrap mt-6 md:space-y-0 space-y-6">
-                <InfoCard
-                    title={'Code'}
-                    description={'Paste TechChill ticket code'}
-                >
+                <InfoCard title={'Code'} description={'Paste TechChill ticket code'}>
                     <FaLink />
                 </InfoCard>
-                <InfoCard
-                    title={'Wallet'}
-                    description={'Connect metamask wallet'}
-                >
+                <InfoCard title={'Wallet'} description={'Connect metamask wallet'}>
                     <FaWallet />
                 </InfoCard>
-                <InfoCard
-                    title={'Ticket'}
-                    description={'Mint Techchill 2022 NFT ticket'}
-                >
+                <InfoCard title={'Ticket'} description={'Mint Techchill 2022 NFT'}>
                     <FaTicketAlt />
-                </InfoCard>
-                <InfoCard
-                    title={'Event'}
-                    description={'Register for side events'}
-                >
-                    <FaCalendarDay />
                 </InfoCard>
             </div>
         </div>

@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react';
 import Mint from "../Components/Mint";
 import Welcome from "../Components/Welcome";
 import Info from "../Components/Info";
-import {useSearchParams} from "react-router-dom";
 import {useSignature} from "../useSignature";
-import {ethers} from "ethers";
 import CtxProvider from "../Components/Context";
+import {ethers} from "ethers";
 
 
 const Client = () => {
@@ -24,38 +23,17 @@ const Client = () => {
         initAccount();
     }, []);
 
-
-    const [searchParams, setSearchParams] = useSearchParams();
-
-    // if (!window.ethereum) {
-    //     const redirectUrl = "https://metamask.app.link/dapp/" + window.location.host + window.location.pathname;
-    //     return (
-    //         <div className="text-black text-4xl container px-4 ">
-    //             <Welcome tokenId={''} signature={''} setSignature={() => {}} resetSign={() => {}} provider={null} lastMintUrl={''}/>
-    //             <InstallMetamask url={redirectUrl} />
-    //             <Info />
-    //         </div>
-    //     );
-    // }
-    //
-    // window.ethereum.on('accountsChanged', (accounts: string[]) => {
-    //     setAddress(accounts[0]);
-    // });
-    //
     const provider = window.ethereum && new ethers.providers.Web3Provider(window.ethereum);
-
-    const path = searchParams.get("code");
 
     return (
         <CtxProvider>
             <div className="text-black text-4xl container px-4">
-                <Welcome setSignature={setSignature} signature={signature} resetSign={resetSign} lastMintUrl={lastMintUrl} tokenId={tokenId} path={path || ''} />
+                <Welcome setSignature={setSignature} signature={signature} resetSign={resetSign} lastMintUrl={lastMintUrl} tokenId={tokenId} />
                 <Mint
                     err={err}
                     setErr={setErr}
                     lastMintUrl={lastMintUrl}
                     setLastMint={setLastMint}
-                    path={path}
                     provider={provider}
                     address={address}
                     setAddress={setAddress}

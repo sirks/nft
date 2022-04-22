@@ -81,7 +81,7 @@ router.get('/mint', mintMiddleware, async (req: express.Request, res: express.Re
     await dao.update(access);
     const ipfsToken = await storeArt();
     try {
-        const mintResult:any = await mint(address, ipfsToken.url);
+        const mintResult: any = await mint(address, ipfsToken.url);
         console.log("mint ok", mintResult);
         access.transactionHash = mintResult.hash;
     } catch (e) {
@@ -118,28 +118,29 @@ router.get('/entrance', async (req: express.Request, res: express.Response) => {
         }
         const entrance = req.query.entrance.toLowerCase();
         if (token.address && token.transactionHash) {
-            if (token.entrances) {
-                if (token.entrances[entrance]) {
-                    const err: BaseRestResp = {err: {msg: "ticket already scanned", code: ERR.TICKET_SCANNED}};
-                    res.status(404).send(err);
-                    return;
-                }
-                //can be undefined, which is a different business logic
-                if (token.entrances[entrance] === false) {
-                    token.entrances[entrance] = true;
-                    await dao.update(token);
-                    const ok: BaseRestResp = {data: {code: OK.NEW_VISIT}};
-                    res.send(ok);
-                    return;
-                }
+            if (!token.entrances) {
+                token.entrances = {};
             }
-            const err: BaseRestResp = {err: {msg: "not registered to this event", code: ERR.NOT_REGISTERED}};
-            res.status(404).send(err);
+            if (token.entrances[entrance]) {
+                const err: BaseRestResp = {err: {msg: "ticket already scanned", code: ERR.TICKET_SCANNED}};
+                res.status(404).send(err);
+                return;
+            }
+            //can be undefined, which is a different business logic
+            // if (token.entrances[entrance] === false) {
+            token.entrances[entrance] = true;
+            await dao.update(token);
+            const ok: BaseRestResp = {data: {code: OK.NEW_VISIT}};
+            res.send(ok);
             return;
+            // const err: BaseRestResp = {err: {msg: "not registered to this event", code: ERR.NOT_REGISTERED}};
+            // res.status(404).send(err);
+            // return;
         }
         const err: BaseRestResp = {err: {msg: "token not minted", code: ERR.TOKEN_NOT_MINTED}}
         res.status(404).send(err);
-    } catch (e) {
+    } catch
+        (e) {
         const err: BaseRestResp = {err: {msg: "Something went wrong", code: ERR.INCORRECT_DATA}}
         res.status(400).send(err);
         return;

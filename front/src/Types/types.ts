@@ -41,7 +41,8 @@ export type Nft = {
 
 export enum MintState {
     NO_SUCH_TOKEN = -1,
-    IS_NOT_MINTED = 0,
-    IS_MINTED = 1,
-    IS_MINTING = 2
+    START = 0,
+    IS_NOT_MINTED = 1,
+    IS_MINTED = 2,
+    IS_MINTING = 3
 }
