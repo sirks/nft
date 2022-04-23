@@ -45,7 +45,6 @@ router.get('/check-ticket', async (req: express.Request, res: express.Response) 
     }
 });
 
-
 async function mintMiddleware(req: express.Request, res: express.Response, next) {
     if (typeof req.query.ticketid !== 'string' || typeof req.query.address !== 'string') {
         const err: BaseRestResp = {err: {msg: "pass ticketid, address in query params", code: ERR.INCORRECT_DATA}};
@@ -91,7 +90,7 @@ router.get('/mint', mintMiddleware, async (req: express.Request, res: express.Re
         setTimeout(async () => {
             access.address = undefined;
             await dao.update(access);
-        }, 60000);
+        }, 1000);
         return;
     }
 

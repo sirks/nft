@@ -43,6 +43,7 @@ const Welcome: FC<WelcomeProps> = ({lastMintUrl, signature, setSignature, resetS
                     }
                     {lastMintUrl && <>
                         <p className="leading-relaxed text-base">
+                            <p className="pr-2 inline">GREAT SUCCESS...</p>
                             {tokenId ? "See my NFT in" : "My NFT is minting. See collection in"}
                             <a
                                 className="inline pl-2 sm:text-xl text-xl cursor-pointer text-blue"

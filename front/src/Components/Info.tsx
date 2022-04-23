@@ -1,6 +1,6 @@
 import React from 'react';
 import InfoCard from "./InfoCard";
-import {FaTicketAlt, FaLink, FaWallet, FaCalendarDay} from "react-icons/fa";
+import {FaLink, FaQrcode, FaTicketAlt, FaWallet} from "react-icons/fa";
 
 const Info = () => {
     return (
@@ -11,13 +11,16 @@ const Info = () => {
             </div>
             <div className="flex justify-center flex-wrap mt-6 md:space-y-0 space-y-6">
                 <InfoCard title={'Code'} description={'Paste TechChill ticket code'}>
-                    <FaLink />
+                    <FaQrcode/>
+                </InfoCard>
+                <InfoCard title={'Metamask'} description={'Install metamask'}>
+                    <FaLink/>
                 </InfoCard>
                 <InfoCard title={'Wallet'} description={'Connect metamask wallet'}>
-                    <FaWallet />
+                    <FaWallet/>
                 </InfoCard>
                 <InfoCard title={'Ticket'} description={'Mint Techchill 2022 NFT'}>
-                    <FaTicketAlt />
+                    <FaTicketAlt/>
                 </InfoCard>
             </div>
         </div>

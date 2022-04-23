@@ -1431,7 +1431,7 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
 pragma solidity ^0.8.4;
 
 
-contract TechchillCoin is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+contract Techchill2022 is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
@@ -1441,7 +1441,7 @@ contract TechchillCoin is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     //event => address => token
     mapping(string => mapping(address => uint256)) private attendanceByClient;
 
-    constructor() ERC721("Techchill Coin", "TCC") {}
+    constructor() ERC721("Techchill 2022", "TC22") {}
 
     function safeMint(address to, string memory uri) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
