@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {OPENSEA_COLLECTION} from "../environment";
+import {OPENSEA_ASSETS, OPENSEA_COLLECTION} from "../environment";
 import LastMint from "./LastMint";
 import {ipfs2https} from "../utils";
 
@@ -11,7 +11,7 @@ type WelcomeProps = {
     tokenId: string,
 }
 
-const Welcome: FC<WelcomeProps> = ({ lastMintUrl, signature, setSignature, resetSign, tokenId}) => {
+const Welcome: FC<WelcomeProps> = ({lastMintUrl, signature, setSignature, resetSign, tokenId}) => {
 
     return (
         <section className="text-black body-font">
@@ -22,18 +22,37 @@ const Welcome: FC<WelcomeProps> = ({ lastMintUrl, signature, setSignature, reset
                     </h1>
                     {/*<p className="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-black title-font font-medium mt-6">Here*/}
                     {/*    you can mint NFT ticket. After that generate QR code from it.</p>*/}
-                    {!lastMintUrl &&
-                    <img
-                        title="Techchill 2022 gif"
-                        alt="Techchill 2022 gif"
-                        className="flex-shrink-0 w-[256px] h-[256px] object-cover object-center mx-auto mt-6 cursor-pointer"
-                        src={'/techchill_nft_gif.gif'}
-                        onClick={e => window.open(OPENSEA_COLLECTION, "_blank")}
-                    />
+                    {!lastMintUrl && <>
+                        <p className="leading-relaxed text-base">
+                            Browse this collection in
+                            <a
+                                className="inline pl-2 sm:text-xl text-xl cursor-pointer text-blue"
+                                onClick={e => window.open(OPENSEA_COLLECTION, "_blank")}>
+                                OPENSEA
+                            </a>
+                        </p>
+                        <img
+                            title="Techchill 2022 gif"
+                            alt="Techchill 2022 gif"
+                            className="flex-shrink-0 w-[256px] h-[256px] object-cover object-center mx-auto mt-6 cursor-pointer"
+                            src={'/techchill_nft_gif.gif'}
+                            onClick={e => window.open(OPENSEA_COLLECTION, "_blank")}
+                        />
+
+                    </>
                     }
-                    {lastMintUrl &&
-                    <LastMint signature={signature} resetSign={resetSign}
-                              url={ipfs2https(lastMintUrl)} name={'my techchill 2022 nft'} tokenId={tokenId}/>
+                    {lastMintUrl && <>
+                        <p className="leading-relaxed text-base">
+                            {tokenId ? "See my NFT in" : "My NFT is minting. See collection in"}
+                            <a
+                                className="inline pl-2 sm:text-xl text-xl cursor-pointer text-blue"
+                                onClick={e => window.open(tokenId ? OPENSEA_ASSETS + tokenId : OPENSEA_COLLECTION, "_blank")}>
+                                OPENSEA
+                            </a>
+                        </p>
+                        <LastMint signature={signature} resetSign={resetSign}
+                                  url={ipfs2https(lastMintUrl)} name={'my techchill 2022 nft'} tokenId={tokenId}/>
+                    </>
                     }
                     {/*{lastMintUrl &&*/}
                     {/*    <div*/}
