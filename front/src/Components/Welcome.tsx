@@ -27,7 +27,8 @@ const Welcome: FC<WelcomeProps> = ({lastMintUrl, signature, setSignature, resetS
                             Browse this collection in
                             <a
                                 className="inline pl-2 sm:text-xl text-xl cursor-pointer text-blue"
-                                onClick={e => window.open(OPENSEA_COLLECTION, "_blank")}>
+                                href={OPENSEA_COLLECTION}
+                                target="_blank">
                                 OPENSEA
                             </a>
                         </p>
@@ -47,7 +48,9 @@ const Welcome: FC<WelcomeProps> = ({lastMintUrl, signature, setSignature, resetS
                             {tokenId ? "See my NFT in" : "My NFT is minting. See collection in"}
                             <a
                                 className="inline pl-2 sm:text-xl text-xl cursor-pointer text-blue"
-                                onClick={e => window.open(tokenId ? OPENSEA_ASSETS + tokenId : OPENSEA_COLLECTION, "_blank")}>
+                                href={tokenId ? OPENSEA_ASSETS + tokenId : OPENSEA_COLLECTION}
+                                target="_blank"
+                            >
                                 OPENSEA
                             </a>
                         </p>

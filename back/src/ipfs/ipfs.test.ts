@@ -12,6 +12,6 @@ async function fileFromPath(filePath: string) {
 
 test('store works', async () => {
     const image = await fileFromPath(path.join(__dirname, "glow.gif"))
-    const token = await store(image, "glow", "its glowing");
+    const token = await store(image);
     expect(token.url).toBeGreaterThan(2);
 });

@@ -10,13 +10,13 @@ async function getArtFile() {
     return new File([content], "techchill.png", {type: "image/png"});
 }
 
-export async function store(image: File, name: string, description: string) {
-    return await nftStorage.store({image, name, description});
+export async function store(image: File) {
+    return await nftStorage.store({description: "Techchill 2022 NFT", name: "", image});
 }
 
 export async function storeArt() {
     const image = await getArtFile();
-    return await store(image, "Techchill 2022", "Techchill 2022 nft");
+    return await store(image);
 }
 
 export function ipfs2https(uri: string) {

@@ -17,6 +17,7 @@ export async function mint(to: string, uri: string): Promise<string> {
     const baseFee = (await provider.getBlock("latest")).baseFeePerGas;
     const fees = {maxPriorityFeePerGas: gasPrice, maxFeePerGas: baseFee?.mul(2).add(gasPrice)}
     return await contract.safeMint(to, uri, fees);
+    // return await contract.safeMint(to, uri);
 }
 
 export async function estimateMint(to: string, uri: string): Promise<number> {
