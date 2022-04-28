@@ -1,4 +1,4 @@
-import React, {FC, useContext, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 import {checkTicket, mint} from "../utils";
 import {BaseProps, ERR, MintState, OK} from "../Types/types";
 import MintInput from "./MintInput";
@@ -33,9 +33,24 @@ const Mint: FC<MintProps> = ({
     const [mintState, setMintState] = useState<MintState>(MintState.START);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [ticketExists, setTicketExists] = useState<boolean>(false);
-    const [ticketInput, setTicketInput] = useState<string>('');
+    const [ticketInput, setTicketInput] = useState<string>(localStorage.getItem('ticketCode') || '');
     const {ticketId, setTicketId} = useContext(TicketCtx);
     const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        if (provider) {
+            if (ticketInput) {
+                onCheck(ticketInput).then();
+            }
+            localStorage.removeItem('ticketCode');
+            return;
+        }
+        if (!provider) {
+            if (ticketInput) {
+                onCheck(ticketInput).then();
+            }
+        }
+    }, []);
 
     // useEffect(() => {
     //     const isMinted = async () => {
@@ -78,6 +93,7 @@ const Mint: FC<MintProps> = ({
 
     const onCheck = async (code: string) => {
         try {
+            localStorage.removeItem('ticketCode');
             if (code === '') {
                 setErr('Ticket ID is not specified');
                 return;
@@ -113,6 +129,9 @@ const Mint: FC<MintProps> = ({
                 setIsLoading(false);
                 setTicketExists(true);
                 setMintState(MintState.IS_NOT_MINTED);
+                if (!provider) {
+                    localStorage.setItem('ticketCode', ticketInput);
+                }
             }
             if (checkResult.data && checkResult.data.code === OK.MINTED) {
                 setErr('');
@@ -122,6 +141,7 @@ const Mint: FC<MintProps> = ({
                 setTicketExists(true);
                 setMintState(MintState.IS_MINTED);
                 setTicketId(ticketInput);
+                localStorage.removeItem('ticketCode');
             }
         } catch (e) {
             setErr('Something went wrong');
@@ -175,16 +195,17 @@ const Mint: FC<MintProps> = ({
         // const path = searchParams.get("parent") || window.location.host + window.location.pathname;
         const path = window.location.host + window.location.pathname;
         const redirectUrl = "https://metamask.app.link/dapp/" + path;
-        debugger;
+        // debugger;
         return (
             <div className="mt-6">
-                <InstallMetamask url={redirectUrl} />
+                <InstallMetamask url={redirectUrl} ticketInput={ticketInput} setIsLoading={setIsLoading}/>
+                <TicketInput ticketInput={ticketInput} setTicketInput={setTicketInput} provider={provider} isLoading={isLoading} address={address} mintState={mintState} onCheck={onCheck}/>
             </div>
         );
     }
 
     if (provider) {
-        provider.on('accountsChanged', (accounts: string[]) => {
+        window.ethereum.on('accountsChanged', (accounts: string[]) => {
             setAddress(accounts[0]);
         });
     }
